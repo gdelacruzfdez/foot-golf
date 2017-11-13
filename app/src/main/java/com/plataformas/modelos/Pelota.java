@@ -48,7 +48,7 @@ public class Pelota extends Modelo {
         sprites.put(PELOTA_MOVIMIENTO, pelota_movimiento);
 
         Sprite pelota_parada = new Sprite(
-                CargadorGraficos.cargarDrawable(context, R.drawable.ball_sprite),
+                CargadorGraficos.cargarDrawable(context, R.drawable.ball_sprite_parado),
                 ancho, altura,
                 1, 1, true);
         sprites.put(PELOTA_PARADA, pelota_parada);

@@ -2,6 +2,8 @@ package com.plataformas;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -94,8 +96,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     float x[] = new float[6];
     float y[] = new float[6];
 
+    float xInicioTiro = 0;
+    float yInicioTiro = 0;
+
+    float xFinalTiro = 0;
+    float yFinalTiro= 0;
+    boolean duranteTiro = false;
+
     public void procesarEventosTouch() {
         boolean pulsacionPadMover = false;
+
 
         for (int i = 0; i < 6; i++) {
             if (accion[i] != NO_ACTION) {
@@ -103,7 +113,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if (accion[i] == ACTION_DOWN) {
                     if (nivel.nivelPausado)
                         nivel.nivelPausado = false;
+                    duranteTiro = true;
+                    xInicioTiro = x[i];
+                    yInicioTiro = y[i];
                 }
+                if (accion[i] == ACTION_MOVE) {
+                    xFinalTiro = x[i];
+                    yFinalTiro = y[i];
+
+                }
+                if (accion[i] == ACTION_UP) {
+                    xFinalTiro = x[i];
+                    yFinalTiro = y[i];
+                    duranteTiro = false;
+
+                }
+
 
                 if (botonDisparar.estaPulsado(x[i], y[i])) {
                     if (accion[i] == ACTION_DOWN) {
@@ -180,7 +205,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         iconosVida = new IconoVida[3];
 
-        if(marcador == null) {
+        if (marcador == null) {
             marcador = new Marcador(context, GameView.pantallaAncho * 0.9, GameView.pantallaAlto * 0.1);
         }
 
@@ -202,6 +227,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     protected void dibujar(Canvas canvas) {
         nivel.dibujar(canvas);
+
         if (!nivel.nivelPausado) {
             pad.dibujar(canvas);
             botonSaltar.dibujar(canvas);
@@ -209,6 +235,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             marcador.dibujar(canvas);
             for (int i = 0; i < nivel.getJugador().vidas; i++)
                 iconosVida[i].dibujar(canvas);
+
+            if(duranteTiro){
+                Paint p = new Paint();
+                p.setColor(Color.WHITE);
+                canvas.drawLine(xInicioTiro,yInicioTiro,xFinalTiro,yFinalTiro,p);
+            }
 
         }
     }
