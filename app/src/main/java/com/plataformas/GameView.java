@@ -91,11 +91,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     float x[] = new float[6];
     float y[] = new float[6];
 
-    float xInicioTiro = 0;
-    float yInicioTiro = 0;
 
-    float xFinalTiro = 0;
-    float yFinalTiro = 0;
     boolean duranteTiro = false;
 
     public void procesarEventosTouch() {
@@ -109,18 +105,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     if (nivel.nivelPausado)
                         nivel.nivelPausado = false;
                     duranteTiro = true;
-                    xInicioTiro = x[i];
-                    yInicioTiro = y[i];
+                    nivel.xInicioTiro = x[i];
+                    nivel.yInicioTiro = y[i];
                 }
                 if (accion[i] == ACTION_MOVE) {
-                    xFinalTiro = x[i];
-                    yFinalTiro = y[i];
+                    nivel.xFinalTiro = x[i];
+                    nivel.yFinalTiro = y[i];
 
                 }
                 if (accion[i] == ACTION_UP) {
-                    xFinalTiro = x[i];
-                    yFinalTiro = y[i];
+                    nivel.xFinalTiro = x[i];
+                    nivel.yFinalTiro = y[i];
                     duranteTiro = false;
+                    nivel.disparado = false;
 
                 }
 
@@ -144,7 +141,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
 
-
     }
 
     public void actualizar(long tiempo) throws Exception {
@@ -164,7 +160,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 p.setColor(Color.WHITE);
                 float xPelota = (float) nivel.getPelota().getCoordenadaXDibujarPelota();
                 float yPelota = (float) nivel.getPelota().getCoordenadaYDibujarPelota();
-                canvas.drawLine(xPelota, yPelota, xPelota + xInicioTiro - xFinalTiro, yPelota + yInicioTiro - yFinalTiro, p);
+                canvas.drawLine(xPelota, yPelota, xPelota + nivel.xInicioTiro - nivel.xFinalTiro, yPelota + nivel.yInicioTiro - nivel.yFinalTiro, p);
             }
 
         }

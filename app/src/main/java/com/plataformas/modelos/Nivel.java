@@ -50,6 +50,14 @@ public class Nivel {
     public boolean nivelPausado;
 
     public boolean inicializado;
+    public boolean duranteTiro = false;
+    public boolean disparado = true;
+
+    public float xInicioTiro = 0;
+    public float yInicioTiro = 0;
+
+    public float xFinalTiro = 0;
+    public float yFinalTiro = 0;
 
 
     public Nivel(Context context, int numeroNivel) throws Exception {
@@ -109,7 +117,14 @@ public class Nivel {
                 disparoJugador.actualizar(tiempo);
             }
 
-
+            if (!disparado) {
+                double velocidadX = xInicioTiro - xFinalTiro;
+                double velocidadY = yInicioTiro - yFinalTiro;
+                pelota.velocidadX = velocidadX / 6;
+                pelota.velocidadY = velocidadY / 6;
+                pelota.enElAire = true;
+                disparado = true;
+            }
 
 
             for (Recolectable r : recolectables) {
@@ -332,7 +347,6 @@ public class Nivel {
                 return new Tile(null, Tile.PASABLE);
         }
     }
-
 
 
     private void aplicarReglasMovimiento() throws Exception {

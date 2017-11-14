@@ -18,9 +18,9 @@ public class Pelota extends Modelo {
     public static final String PELOTA_MOVIMIENTO = "Pelota_movimiento";
     public static final String PELOTA_PARADA = "Pelota_parada";
     double velocidadX;
-    float velocidadY; // actual
+    double velocidadY; // actual
 
-
+    double VALOR_ROZAMIENTO = 0.8f;
     boolean enMovimiento = false;
     public boolean enElAire; // está en el aire
 
@@ -62,16 +62,33 @@ public class Pelota extends Modelo {
         sprite.dibujarSprite(canvas, (int) x - Nivel.scrollEjeX, (int) y - Nivel.scrollEjeY, false);
     }
 
-    public int getCoordenadaXDibujarPelota(){
+    public int getCoordenadaXDibujarPelota() {
         return (int) (x - Nivel.scrollEjeX);
     }
 
-    public int getCoordenadaYDibujarPelota(){
+    public int getCoordenadaYDibujarPelota() {
         return (int) y - Nivel.scrollEjeY;
     }
 
     public void actualizar(long tiempo) {
         sprite.actualizar(tiempo);
+        aplicarRozamiento();
+    }
+
+    private void aplicarRozamiento() {
+        if (!enElAire) {
+            if (velocidadX > 0) {
+                velocidadX -= VALOR_ROZAMIENTO;
+                if (velocidadX < 0) {
+                    velocidadX = 0;
+                }
+            } else if (velocidadX < 0) {
+                velocidadX += VALOR_ROZAMIENTO;
+                if (velocidadX > 0) {
+                    velocidadX = 0;
+                }
+            }
+        }
     }
 
     public void restablecerPosicionInicial() {
