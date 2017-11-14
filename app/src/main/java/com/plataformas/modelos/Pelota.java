@@ -75,7 +75,7 @@ public class Pelota extends Modelo {
         aplicarRozamiento();
     }
 
-    private void aplicarRozamiento() {
+    public void aplicarRozamiento() {
         if (!enElAire) {
             if (velocidadX > 0) {
                 velocidadX -= VALOR_ROZAMIENTO;

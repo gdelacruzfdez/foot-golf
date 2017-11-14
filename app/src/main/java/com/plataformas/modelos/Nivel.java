@@ -44,7 +44,7 @@ public class Nivel {
     public static int scrollEjeX = 0;
     public static int scrollEjeY = 0;
     private float velocidadGravedad = 0.8f;
-    private float velocidadMaximaCaida = 10;
+    private float velocidadMaximaCaida = 40;
 
     public Bitmap mensaje;
     public boolean nivelPausado;
@@ -735,7 +735,11 @@ public class Nivel {
                 if (distanciaY > 0) {
                     pelota.y += Math.min(distanciaY, pelota.velocidadY);
 
-                } else {
+                } else if (pelota.velocidadY > 0.8f) {
+                    //REBOTE
+                    pelota.velocidadY = -pelota.velocidadY / 2;
+                    pelota.velocidadX/=1.5;
+                } else{
                     // Toca suelo, nos aseguramos de que está bien
                     pelota.y = TileJugadorBordeInferior - pelota.altura / 2;
                     pelota.velocidadY = 0;
