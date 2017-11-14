@@ -53,6 +53,8 @@ public class Nivel {
     public boolean duranteTiro = false;
     public boolean disparado = true;
 
+
+    public static final float MAX_POWER = 250;
     public float xInicioTiro = 0;
     public float yInicioTiro = 0;
 
@@ -118,8 +120,21 @@ public class Nivel {
             }
 
             if (!disparado) {
-                double velocidadX = xInicioTiro - xFinalTiro;
-                double velocidadY = yInicioTiro - yFinalTiro;
+                float xPelota = pelota.getCoordenadaXDibujarPelota();
+                float yPelota = pelota.getCoordenadaYDibujarPelota();
+                float xPuntoFinal = xPelota + xInicioTiro - xFinalTiro;
+                float yPuntoFinal = yPelota + yInicioTiro - yFinalTiro;
+
+                double distance = Math.sqrt(Math.pow(xPelota - xPuntoFinal, 2) + Math.pow(yPelota - yPuntoFinal, 2));
+                if (distance > MAX_POWER) {
+                    float ratio = (float) (MAX_POWER / distance);
+                    xPuntoFinal = (1 - ratio) * xPelota + ratio * xPuntoFinal;
+                    yPuntoFinal = (1 - ratio) * yPelota + ratio * yPuntoFinal;
+                }
+
+                double velocidadX = xPuntoFinal - xPelota;
+                double velocidadY = yPuntoFinal - yPelota;
+
                 pelota.velocidadX = velocidadX / 6;
                 pelota.velocidadY = velocidadY / 6;
                 pelota.enElAire = true;
@@ -616,6 +631,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeDerecho - pelota.ancho / 2;
+                    pelota.velocidadX = -pelota.velocidadX/5;
                 }
             }
         }
@@ -661,6 +677,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeIzquierdo + pelota.ancho / 2;
+                    pelota.velocidadX = -pelota.velocidadX/5;
                 }
             }
         }
@@ -738,8 +755,8 @@ public class Nivel {
                 } else if (pelota.velocidadY > 0.8f) {
                     //REBOTE
                     pelota.velocidadY = -pelota.velocidadY / 2;
-                    pelota.velocidadX/=1.5;
-                } else{
+                    pelota.velocidadX /= 1.5;
+                } else {
                     // Toca suelo, nos aseguramos de que está bien
                     pelota.y = TileJugadorBordeInferior - pelota.altura / 2;
                     pelota.velocidadY = 0;

@@ -160,7 +160,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 p.setColor(Color.WHITE);
                 float xPelota = (float) nivel.getPelota().getCoordenadaXDibujarPelota();
                 float yPelota = (float) nivel.getPelota().getCoordenadaYDibujarPelota();
-                canvas.drawLine(xPelota, yPelota, xPelota + nivel.xInicioTiro - nivel.xFinalTiro, yPelota + nivel.yInicioTiro - nivel.yFinalTiro, p);
+
+                float xPuntoFinal = xPelota + nivel.xInicioTiro - nivel.xFinalTiro;
+                float yPuntoFinal = yPelota + nivel.yInicioTiro - nivel.yFinalTiro;
+                double distance = Math.sqrt(Math.pow(xPelota - xPuntoFinal, 2) + Math.pow(yPelota - yPuntoFinal, 2));
+                if (distance > nivel.MAX_POWER) {
+                    float ratio = (float) (nivel.MAX_POWER / distance);
+                    xPuntoFinal = (1 - ratio) * xPelota + ratio * xPuntoFinal;
+                    yPuntoFinal = (1 - ratio) * yPelota + ratio * yPuntoFinal;
+                }
+                canvas.drawLine(xPelota, yPelota, xPuntoFinal, yPuntoFinal, p);
             }
 
         }
