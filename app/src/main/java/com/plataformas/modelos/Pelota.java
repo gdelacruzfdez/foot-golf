@@ -22,6 +22,7 @@ public class Pelota extends Modelo {
 
 
     boolean enMovimiento = false;
+    public boolean enElAire; // está en el aire
 
     double xInicial;
     double yInicial;
@@ -59,6 +60,14 @@ public class Pelota extends Modelo {
 
     public void dibujar(Canvas canvas) {
         sprite.dibujarSprite(canvas, (int) x - Nivel.scrollEjeX, (int) y - Nivel.scrollEjeY, false);
+    }
+
+    public int getCoordenadaXDibujarPelota(){
+        return (int) (x - Nivel.scrollEjeX);
+    }
+
+    public int getCoordenadaYDibujarPelota(){
+        return (int) y - Nivel.scrollEjeY;
     }
 
     public void actualizar(long tiempo) {

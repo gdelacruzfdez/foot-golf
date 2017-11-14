@@ -20,11 +20,6 @@ import com.plataformas.modelos.controles.Pad;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
-    //Controles
-    private Pad pad;
-    private BotonSaltar botonSaltar;
-    private BotonDisparar botonDisparar;
-    private IconoVida[] iconosVida;
     private Marcador marcador;
 
     boolean iniciado = false;
@@ -100,7 +95,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     float yInicioTiro = 0;
 
     float xFinalTiro = 0;
-    float yFinalTiro= 0;
+    float yFinalTiro = 0;
     boolean duranteTiro = false;
 
     public void procesarEventosTouch() {
@@ -130,65 +125,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
 
-                if (botonDisparar.estaPulsado(x[i], y[i])) {
-                    if (accion[i] == ACTION_DOWN) {
-                        nivel.botonDispararPulsado = true;
-                    }
-                }
-
-
-                if (botonSaltar.estaPulsado(x[i], y[i])) {
-                    if (accion[i] == ACTION_DOWN) {
-                        nivel.botonSaltarPulsado = true;
-                    }
-                }
-
-                if (pad.estaPulsado(x[i], y[i])) {
-
-                    float orientacion = pad.getOrientacionX(x[i]);
-
-                    // Si almenosuna pulsacion está en el pad
-                    if (accion[i] != ACTION_UP) {
-                        pulsacionPadMover = true;
-                        nivel.orientacionPad = orientacion;
-                    }
-                }
             }
         }
-        if (!pulsacionPadMover) {
-            nivel.orientacionPad = 0;
-        }
-
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Log.v("Tecla", "Tecla pulsada: " + keyCode);
-        if (keyCode == 32) {
-            nivel.orientacionPad = -0.5f;
-        }
-        if (keyCode == 29) {
-            nivel.orientacionPad = 0.5f;
-        }
-        if (keyCode == 47) {
-            nivel.orientacionPad = 0;
-        }
-        if (keyCode == 51) {
-            nivel.botonSaltarPulsado = true;
-        }
-        if (keyCode == 62) {
-            nivel.botonDispararPulsado = true;
-        }
-
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == 32 || keyCode == 29) {
-            nivel.orientacionPad = 0;
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
 
@@ -198,23 +136,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     protected void inicializar() throws Exception {
         nivel = new Nivel(context, numeroNivel);
-        pad = new Pad(context);
-        botonSaltar = new BotonSaltar(context);
-        botonDisparar = new BotonDisparar(context);
         nivel.gameView = this;
 
-        iconosVida = new IconoVida[3];
 
         if (marcador == null) {
             marcador = new Marcador(context, GameView.pantallaAncho * 0.9, GameView.pantallaAlto * 0.1);
         }
 
-        iconosVida[0] = new IconoVida(context, GameView.pantallaAncho * 0.05,
-                GameView.pantallaAlto * 0.1);
-        iconosVida[1] = new IconoVida(context, GameView.pantallaAncho * 0.15,
-                GameView.pantallaAlto * 0.1);
-        iconosVida[2] = new IconoVida(context, GameView.pantallaAncho * 0.25,
-                GameView.pantallaAlto * 0.1);
 
 
     }
@@ -229,17 +157,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         nivel.dibujar(canvas);
 
         if (!nivel.nivelPausado) {
-            pad.dibujar(canvas);
-            botonSaltar.dibujar(canvas);
-            botonDisparar.dibujar(canvas);
             marcador.dibujar(canvas);
-            for (int i = 0; i < nivel.getJugador().vidas; i++)
-                iconosVida[i].dibujar(canvas);
 
-            if(duranteTiro){
+            if (duranteTiro) {
                 Paint p = new Paint();
                 p.setColor(Color.WHITE);
-                canvas.drawLine(xInicioTiro,yInicioTiro,xFinalTiro,yFinalTiro,p);
+                float xPelota = (float) nivel.getPelota().getCoordenadaXDibujarPelota();
+                float yPelota = (float) nivel.getPelota().getCoordenadaYDibujarPelota();
+                canvas.drawLine(xPelota, yPelota, xPelota + xInicioTiro - xFinalTiro, yPelota + yInicioTiro - yFinalTiro, p);
             }
 
         }

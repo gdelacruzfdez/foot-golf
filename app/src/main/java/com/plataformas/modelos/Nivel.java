@@ -31,7 +31,6 @@ public class Nivel {
     private int numeroNivel;
     private Fondo[] fondos;
     private Tile[][] mapaTiles;
-    private Jugador jugador;
     private Pelota pelota;
 
     private List<CheckPoint> checkpoints;
@@ -52,10 +51,6 @@ public class Nivel {
 
     public boolean inicializado;
 
-    //Comunicacion con el GameView
-    public float orientacionPad = 0;
-    public boolean botonSaltarPulsado = false;
-    public boolean botonDispararPulsado = false;
 
     public Nivel(Context context, int numeroNivel) throws Exception {
         inicializado = false;
@@ -115,16 +110,7 @@ public class Nivel {
             }
 
 
-            jugador.procesarOrdenes(orientacionPad, botonSaltarPulsado, botonDispararPulsado);
 
-            if (botonSaltarPulsado) {
-                botonSaltarPulsado = false;
-            }
-
-            if (botonDispararPulsado) {
-                disparosJugador.add(new DisparoJugador(context, jugador.x, jugador.y, jugador.orientacion));
-                botonDispararPulsado = false;
-            }
 
             for (Recolectable r : recolectables) {
                 r.actualizar(tiempo);
@@ -134,8 +120,6 @@ public class Nivel {
                 c.actualizar(tiempo);
             }
 
-
-            jugador.actualizar(tiempo);
             pelota.actualizar(tiempo);
             aplicarReglasMovimiento();
         }
@@ -156,7 +140,6 @@ public class Nivel {
                 disparoEnemigo.dibujar(canvas);
             }
 
-            jugador.dibujar(canvas);
             pelota.dibujar(canvas);
 
             for (EnemigoInterface enemigo : enemigos) {
@@ -193,36 +176,36 @@ public class Nivel {
 
     private void dibujarTiles(Canvas canvas) {
 
-        int tileXJugador = (int) jugador.x / Tile.ancho;
-        int izquierda = (int) (tileXJugador - tilesEnDistanciaX(jugador.x - scrollEjeX));
+        int tileXJugador = (int) pelota.x / Tile.ancho;
+        int izquierda = (int) (tileXJugador - tilesEnDistanciaX(pelota.x - scrollEjeX));
         izquierda = Math.max(0, izquierda); // Que nunca sea < 0, ej -1
 
-        if (jugador.x <
+        if (pelota.x <
                 anchoMapaTiles() * Tile.ancho - GameView.pantallaAncho * 0.3)
-            if (jugador.x - scrollEjeX > GameView.pantallaAncho * 0.7) {
-                fondos[0].mover((int) jugador.x - GameView.pantallaAncho * 0.7 - scrollEjeX);
-                fondos[1].mover((int) jugador.x - GameView.pantallaAncho * 0.7 - scrollEjeX);
-                scrollEjeX += (int) ((jugador.x - scrollEjeX) - GameView.pantallaAncho * 0.7);
+            if (pelota.x - scrollEjeX > GameView.pantallaAncho * 0.7) {
+                fondos[0].mover((int) pelota.x - GameView.pantallaAncho * 0.7 - scrollEjeX);
+                fondos[1].mover((int) pelota.x - GameView.pantallaAncho * 0.7 - scrollEjeX);
+                scrollEjeX += (int) ((pelota.x - scrollEjeX) - GameView.pantallaAncho * 0.7);
             }
 
 
-        if (jugador.x > GameView.pantallaAncho * 0.3)
-            if (jugador.x - scrollEjeX < GameView.pantallaAncho * 0.3) {
-                fondos[0].mover((int) jugador.x - GameView.pantallaAncho * 0.3 - scrollEjeX);
-                fondos[1].mover((int) jugador.x - GameView.pantallaAncho * 0.3 - scrollEjeX);
-                scrollEjeX -= (int) (GameView.pantallaAncho * 0.3 - (jugador.x - scrollEjeX));
+        if (pelota.x > GameView.pantallaAncho * 0.3)
+            if (pelota.x - scrollEjeX < GameView.pantallaAncho * 0.3) {
+                fondos[0].mover((int) pelota.x - GameView.pantallaAncho * 0.3 - scrollEjeX);
+                fondos[1].mover((int) pelota.x - GameView.pantallaAncho * 0.3 - scrollEjeX);
+                scrollEjeX -= (int) (GameView.pantallaAncho * 0.3 - (pelota.x - scrollEjeX));
             }
 
 
-        if (jugador.y > GameView.pantallaAlto * 0.3) {
-            if (jugador.y - scrollEjeY > GameView.pantallaAlto * 0.7) {
-                scrollEjeY -= (int) (GameView.pantallaAlto * 0.7 - (jugador.y - scrollEjeY));
+        if (pelota.y > GameView.pantallaAlto * 0.3) {
+            if (pelota.y - scrollEjeY > GameView.pantallaAlto * 0.7) {
+                scrollEjeY -= (int) (GameView.pantallaAlto * 0.7 - (pelota.y - scrollEjeY));
             }
         }
 
-        if (jugador.y < altoMapaTiles() * Tile.altura - GameView.pantallaAlto * 0.3) {
-            if (jugador.y - scrollEjeY < GameView.pantallaAlto * 0.3) {
-                scrollEjeY += (int) ((jugador.y - scrollEjeY) - GameView.pantallaAlto * 0.3);
+        if (pelota.y < altoMapaTiles() * Tile.altura - GameView.pantallaAlto * 0.3) {
+            if (pelota.y - scrollEjeY < GameView.pantallaAlto * 0.3) {
+                scrollEjeY += (int) ((pelota.y - scrollEjeY) - GameView.pantallaAlto * 0.3);
             }
         }
 
@@ -344,39 +327,27 @@ public class Nivel {
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
                         R.drawable.musgo), Tile.SOLIDO);
-            case '1':
-                // Jugador
-                // Posicion centro abajo
-                int xCentroAbajoTile = x * Tile.ancho + Tile.ancho / 2;
-                int yCentroAbajoTile = y * Tile.altura + Tile.altura;
-                jugador = new Jugador(context, xCentroAbajoTile, yCentroAbajoTile);
-
-                return new Tile(null, Tile.PASABLE);
-
             default:
                 //cualquier otro caso
                 return new Tile(null, Tile.PASABLE);
         }
     }
 
-    public Jugador getJugador() {
-        return jugador;
-    }
 
 
     private void aplicarReglasMovimiento() throws Exception {
 
         int tileXJugadorIzquierda
-                = (int) (jugador.x - (jugador.ancho / 2 - 1)) / Tile.ancho;
+                = (int) (pelota.x - (pelota.ancho / 2 - 1)) / Tile.ancho;
         int tileXJugadorDerecha
-                = (int) (jugador.x + (jugador.ancho / 2 - 1)) / Tile.ancho;
+                = (int) (pelota.x + (pelota.ancho / 2 - 1)) / Tile.ancho;
 
         int tileYJugadorInferior
-                = (int) (jugador.y + (jugador.altura / 2 - 1)) / Tile.altura;
+                = (int) (pelota.y + (pelota.altura / 2 - 1)) / Tile.altura;
         int tileYJugadorCentro
-                = (int) jugador.y / Tile.altura;
+                = (int) pelota.y / Tile.altura;
         int tileYJugadorSuperior
-                = (int) (jugador.y - (jugador.altura / 2 - 1)) / Tile.altura;
+                = (int) (pelota.y - (pelota.altura / 2 - 1)) / Tile.altura;
 
         for (Iterator<EnemigoInterface> iterator = enemigos.iterator(); iterator.hasNext(); ) {
             AbstractEnemigo enemigo = (AbstractEnemigo) iterator.next();
@@ -404,15 +375,8 @@ public class Nivel {
             if (tileXJugadorIzquierda - rango < tileXEnemigoIzquierda &&
                     tileXJugadorIzquierda + rango > tileXEnemigoIzquierda) {
 
-                if (jugador.colisiona(enemigo)) {
-                    if (jugador.golpeado() <= 0) {
-                        jugador.restablecerPosicionInicial();
-                        nivelPausado = true;
-                        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
-                        scrollEjeX = 0;
-                        scrollEjeY = 0;
-                        return;
-                    }
+                if (pelota.colisiona(enemigo)) {
+                    //TODO FINALIZAR JUEGO O REINICIAR NIVEL, PIERDE
                 }
             }
 
@@ -585,19 +549,19 @@ public class Nivel {
         }
 
         // Gravedad Jugador
-        if (jugador.enElAire) {
+        if (pelota.enElAire) {
             // Recordar los ejes:
             // - es para arriba       + es para abajo.
-            jugador.velocidadY += velocidadGravedad;
-            if (jugador.velocidadY > velocidadMaximaCaida) {
-                jugador.velocidadY = velocidadMaximaCaida;
+            pelota.velocidadY += velocidadGravedad;
+            if (pelota.velocidadY > velocidadMaximaCaida) {
+                pelota.velocidadY = velocidadMaximaCaida;
             }
         }
 
 
 // derecha o parado
 
-        if (jugador.velocidadX > 0) {
+        if (pelota.velocidadX > 0) {
             // Tengo un tile delante y es PASABLE
             // El tile de delante está dentro del Nivel
             if (tileXJugadorDerecha + 1 <= anchoMapaTiles() - 1 &&
@@ -614,7 +578,7 @@ public class Nivel {
                     mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior].tipoDeColision ==
                             Tile.PASABLE) {
 
-                jugador.x += jugador.velocidadX;
+                pelota.x += pelota.velocidadX;
 
                 // No tengo un tile PASABLE delante
                 // o es el FINAL del nivel o es uno SOLIDO
@@ -630,19 +594,19 @@ public class Nivel {
                 // Si en el propio tile del jugador queda espacio para
                 // avanzar más, avanzo
                 int TileJugadorBordeDerecho = tileXJugadorDerecha * Tile.ancho + Tile.ancho;
-                double distanciaX = TileJugadorBordeDerecho - (jugador.x + jugador.ancho / 2);
+                double distanciaX = TileJugadorBordeDerecho - (pelota.x + pelota.ancho / 2);
 
                 if (distanciaX > 0) {
-                    double velocidadNecesaria = Math.min(distanciaX, jugador.velocidadX);
-                    jugador.x += velocidadNecesaria;
+                    double velocidadNecesaria = Math.min(distanciaX, pelota.velocidadX);
+                    pelota.x += velocidadNecesaria;
                 } else {
                     // Opcional, corregir posición
-                    jugador.x = TileJugadorBordeDerecho - jugador.ancho / 2;
+                    pelota.x = TileJugadorBordeDerecho - pelota.ancho / 2;
                 }
             }
         }
 // izquierda
-        if (jugador.velocidadX <= 0) {
+        if (pelota.velocidadX <= 0) {
             // Tengo un tile detrás y es PASABLE
             // El tile de delante está dentro del Nivel
             if (tileXJugadorIzquierda - 1 >= 0 &&
@@ -660,7 +624,7 @@ public class Nivel {
                     mapaTiles[tileXJugadorIzquierda][tileYJugadorSuperior].tipoDeColision ==
                             Tile.PASABLE) {
 
-                jugador.x += jugador.velocidadX;
+                pelota.x += pelota.velocidadX;
 
                 // No tengo un tile PASABLE detrás
                 // o es el INICIO del nivel o es uno SOLIDO
@@ -675,21 +639,21 @@ public class Nivel {
                 // Si en el propio tile del jugador queda espacio para
                 // avanzar más, avanzo
                 int TileJugadorBordeIzquierdo = tileXJugadorIzquierda * Tile.ancho;
-                double distanciaX = (jugador.x - jugador.ancho / 2) - TileJugadorBordeIzquierdo;
+                double distanciaX = (pelota.x - pelota.ancho / 2) - TileJugadorBordeIzquierdo;
 
                 if (distanciaX > 0) {
-                    double velocidadNecesaria = Utilidades.proximoACero(-distanciaX, jugador.velocidadX);
-                    jugador.x += velocidadNecesaria;
+                    double velocidadNecesaria = Utilidades.proximoACero(-distanciaX, pelota.velocidadX);
+                    pelota.x += velocidadNecesaria;
                 } else {
                     // Opcional, corregir posición
-                    jugador.x = TileJugadorBordeIzquierdo + jugador.ancho / 2;
+                    pelota.x = TileJugadorBordeIzquierdo + pelota.ancho / 2;
                 }
             }
         }
 
 
         // Hacia arriba
-        if (jugador.velocidadY < 0) {
+        if (pelota.velocidadY < 0) {
             // Tile superior PASABLE
             // Podemos seguir moviendo hacia arriba
             if (tileYJugadorSuperior - 1 >= 0 &&
@@ -698,7 +662,7 @@ public class Nivel {
                     && mapaTiles[tileXJugadorDerecha][tileYJugadorSuperior - 1].tipoDeColision
                     == Tile.PASABLE) {
 
-                jugador.y += jugador.velocidadY;
+                pelota.y += pelota.velocidadY;
 
                 // Tile superior != de PASABLE
                 // O es un tile SOLIDO, o es el TECHO del mapa
@@ -707,22 +671,22 @@ public class Nivel {
                 // Si en el propio tile del jugador queda espacio para
                 // subir más, subo
                 int TileJugadorBordeSuperior = (tileYJugadorSuperior) * Tile.altura;
-                double distanciaY = (jugador.y - jugador.altura / 2) - TileJugadorBordeSuperior;
+                double distanciaY = (pelota.y - pelota.altura / 2) - TileJugadorBordeSuperior;
 
                 if (distanciaY > 0) {
-                    jugador.y += Utilidades.proximoACero(-distanciaY, jugador.velocidadY);
+                    pelota.y += Utilidades.proximoACero(-distanciaY, pelota.velocidadY);
 
                 } else {
                     // Efecto Rebote -> empieza a bajar;
-                    jugador.velocidadY = velocidadGravedad;
-                    jugador.y += jugador.velocidadY;
+                    pelota.velocidadY = velocidadGravedad;
+                    pelota.y += pelota.velocidadY;
                 }
 
             }
         }
 
         // Hacia abajo
-        if (jugador.velocidadY >= 0) {
+        if (pelota.velocidadY >= 0) {
             // Tile inferior PASABLE
             // Podemos seguir moviendo hacia abajo
             // NOTA - El ultimo tile es especial (caer al vacío )
@@ -733,8 +697,8 @@ public class Nivel {
                     == Tile.PASABLE) {
                 // si los dos están libres cae
 
-                jugador.y += jugador.velocidadY;
-                jugador.enElAire = true; // Sigue en el aire o se cae
+                pelota.y += pelota.velocidadY;
+                pelota.enElAire = true; // Sigue en el aire o se cae
                 // Tile inferior SOLIDO
                 // El ULTIMO, es un caso especial
 
@@ -751,31 +715,31 @@ public class Nivel {
 
 
                 double distanciaY =
-                        TileJugadorBordeInferior - (jugador.y + jugador.altura / 2);
+                        TileJugadorBordeInferior - (pelota.y + pelota.altura / 2);
 
-                jugador.enElAire = true; // Sigue en el aire o se cae
+                pelota.enElAire = true; // Sigue en el aire o se cae
                 if (distanciaY > 0) {
-                    jugador.y += Math.min(distanciaY, jugador.velocidadY);
+                    pelota.y += Math.min(distanciaY, pelota.velocidadY);
 
                 } else {
                     // Toca suelo, nos aseguramos de que está bien
-                    jugador.y = TileJugadorBordeInferior - jugador.altura / 2;
-                    jugador.velocidadY = 0;
-                    jugador.enElAire = false;
+                    pelota.y = TileJugadorBordeInferior - pelota.altura / 2;
+                    pelota.velocidadY = 0;
+                    pelota.enElAire = false;
                 }
 
                 // Esta cayendo por debajo del ULTIMO
                 // va a desaparecer y perder.
             } else {
 
-                jugador.y += jugador.velocidadY;
-                jugador.enElAire = true;
+                pelota.y += pelota.velocidadY;
+                pelota.enElAire = true;
 
-                if (jugador.y + jugador.altura / 2 > GameView.pantallaAlto) {
+                if (pelota.y + pelota.altura / 2 > GameView.pantallaAlto) {
                     // ha perdido
                     scrollEjeX = 0;
                     scrollEjeY = 0;
-                    jugador.restablecerPosicionInicial();
+                    pelota.restablecerPosicionInicial();
                     nivelPausado = true;
                     mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
                 }
@@ -876,15 +840,8 @@ public class Nivel {
             int tileYDisparoSuperior =
                     (int) (disparo.y - disparo.cArriba) / Tile.altura;
 
-            if (disparo.colisiona(jugador)) {
-                if (jugador.golpeado() <= 0) {
-                    jugador.restablecerPosicionInicial();
-                    nivelPausado = true;
-                    mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
-                    scrollEjeX = 0;
-                    scrollEjeY = 0;
-                    return;
-                }
+            if (disparo.colisiona(pelota)) {
+                //TODO FINALIZAR JUEGO
             }
 
 
@@ -949,13 +906,13 @@ public class Nivel {
 
         }
 
-        if (jugador.colisiona(meta)) {
+        if (pelota.colisiona(meta)) {
             gameView.nivelCompleto();
         }
 
         for (Iterator<Recolectable> iterator = recolectables.iterator(); iterator.hasNext(); ) {
             Recolectable r = iterator.next();
-            if (jugador.colisiona(r)) {
+            if (pelota.colisiona(r)) {
                 gameView.getMarcador().incrementarPuntos();
                 iterator.remove();
             }
@@ -963,13 +920,17 @@ public class Nivel {
 
         for (Iterator<CheckPoint> iterator = checkpoints.iterator(); iterator.hasNext(); ) {
             CheckPoint c = iterator.next();
-            if (jugador.colisiona(c) && !c.isAlcanzado()) {
+            if (pelota.colisiona(c) && !c.isAlcanzado()) {
                 c.alcanzar();
-                jugador.setxInicial(c.x);
-                jugador.setyInicial(c.y - (c.altura / 2));
+                pelota.setxInicial(c.x);
+                pelota.setyInicial(c.y - (c.altura / 2));
             }
         }
 
+    }
+
+    public Pelota getPelota() {
+        return this.pelota;
     }
 }
 
