@@ -50,7 +50,6 @@ public class Nivel {
     public boolean nivelPausado;
 
     public boolean inicializado;
-    public boolean duranteTiro = false;
     public boolean disparado = true;
 
 
@@ -119,7 +118,7 @@ public class Nivel {
                 disparoJugador.actualizar(tiempo);
             }
 
-            if (!disparado) {
+            if (disparado) {
                 float xPelota = pelota.getCoordenadaXDibujarPelota();
                 float yPelota = pelota.getCoordenadaYDibujarPelota();
                 float xPuntoFinal = xPelota + xInicioTiro - xFinalTiro;
@@ -138,7 +137,12 @@ public class Nivel {
                 pelota.velocidadX = velocidadX / 6;
                 pelota.velocidadY = velocidadY / 6;
                 pelota.enElAire = true;
-                disparado = true;
+                disparado = false;
+
+            } else {
+                if (pelota.velocidadX == 0 && pelota.velocidadY == 0) {
+                    disparado = false;
+                }
             }
 
 
@@ -405,7 +409,6 @@ public class Nivel {
                     tileXJugadorIzquierda + rango > tileXEnemigoIzquierda) {
 
                 if (pelota.colisiona(enemigo)) {
-                    //TODO FINALIZAR JUEGO O REINICIAR NIVEL, PIERDE
                     pelota.restablecerPosicionInicial();
                 }
             }
@@ -632,7 +635,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeDerecho - pelota.ancho / 2;
-                    pelota.velocidadX = -pelota.velocidadX/5;
+                    pelota.velocidadX = -pelota.velocidadX / 5;
                 }
             }
         }
@@ -678,7 +681,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeIzquierdo + pelota.ancho / 2;
-                    pelota.velocidadX = -pelota.velocidadX/5;
+                    pelota.velocidadX = -pelota.velocidadX / 5;
                 }
             }
         }
@@ -877,7 +880,6 @@ public class Nivel {
                     (int) (disparo.y - disparo.cArriba) / Tile.altura;
 
             if (disparo.colisiona(pelota)) {
-                //TODO FINALIZAR JUEGO
                 pelota.restablecerPosicionInicial();
             }
 
@@ -965,6 +967,8 @@ public class Nivel {
         }
 
     }
+
+
 
     public Pelota getPelota() {
         return this.pelota;

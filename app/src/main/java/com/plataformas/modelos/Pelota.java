@@ -105,6 +105,10 @@ public class Pelota extends Modelo {
 
     }
 
+    public boolean isEnMovimiento() {
+        return velocidadX > 0 || velocidadY > 0;
+    }
+
     public void setxInicial(double xInicial) {
         this.xInicial = xInicial;
     }
