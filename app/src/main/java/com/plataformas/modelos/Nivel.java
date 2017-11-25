@@ -11,6 +11,7 @@ import com.plataformas.GameView;
 import com.plataformas.R;
 import com.plataformas.gestores.CargadorGraficos;
 import com.plataformas.gestores.Utilidades;
+import com.plataformas.modelos.controles.ContadorTiros;
 import com.plataformas.modelos.enemigo.AbstractEnemigo;
 import com.plataformas.modelos.enemigo.Enemigo;
 import com.plataformas.modelos.enemigo.EnemigoDispara;
@@ -32,6 +33,7 @@ public class Nivel {
     private Fondo[] fondos;
     private Tile[][] mapaTiles;
     private Pelota pelota;
+    private ContadorTiros contadorTiros;
 
     private List<CheckPoint> checkpoints;
     private List<EnemigoInterface> enemigos;
@@ -39,6 +41,9 @@ public class Nivel {
     private List<DisparoEnemigo> disparosEnemigos;
     private List<Recolectable> recolectables;
     private Meta meta;
+
+    public static final double TIEMPO_COMPROBACION_DETENIDA = 500;
+    private double tiempoPelotaDetenida = 0;
 
 
     public static int scrollEjeX = 0;
@@ -50,7 +55,7 @@ public class Nivel {
     public boolean nivelPausado;
 
     public boolean inicializado;
-    public boolean disparado = true;
+    public boolean disparado = false;
 
 
     public static final float MAX_POWER = 250;
@@ -59,6 +64,9 @@ public class Nivel {
 
     public float xFinalTiro = 0;
     public float yFinalTiro = 0;
+
+
+    private int tirosPermitidos = 2;
 
 
     public Nivel(Context context, int numeroNivel) throws Exception {
@@ -87,6 +95,7 @@ public class Nivel {
                 R.drawable.capa1), 0);
         fondos[1] = new Fondo(context, CargadorGraficos.cargarBitmap(context,
                 R.drawable.capa2), 1f);
+        contadorTiros = new ContadorTiros(context, GameView.pantallaAncho * 0.1, GameView.pantallaAlto * 0.1, this.tirosPermitidos);
 
         inicializarMapaTiles();
     }
@@ -118,6 +127,20 @@ public class Nivel {
                 disparoJugador.actualizar(tiempo);
             }
 
+            if (contadorTiros.limiteDeTirosAlcanzado()) {
+                if (!pelota.isEnMovimiento()) {
+                    if (tiempoPelotaDetenida == 0) {
+                        this.tiempoPelotaDetenida = System.currentTimeMillis();
+                    } else {
+                        if (System.currentTimeMillis() - tiempoPelotaDetenida > TIEMPO_COMPROBACION_DETENIDA) {
+                            pelotaMuere();
+                        }
+                    }
+                } else {
+                    tiempoPelotaDetenida = 0;
+                }
+            }
+
             if (disparado) {
                 float xPelota = pelota.getCoordenadaXDibujarPelota();
                 float yPelota = pelota.getCoordenadaYDibujarPelota();
@@ -138,6 +161,7 @@ public class Nivel {
                 pelota.velocidadY = velocidadY / 6;
                 pelota.enElAire = true;
                 disparado = false;
+                this.contadorTiros.incrementarTiros();
 
             } else {
                 if (pelota.velocidadX == 0 && pelota.velocidadY == 0) {
@@ -189,6 +213,7 @@ public class Nivel {
             for (CheckPoint c : checkpoints) {
                 c.dibujar(canvas);
             }
+            contadorTiros.dibujar(canvas);
 
             if (nivelPausado) {
                 // la foto mide 480x320
@@ -409,7 +434,7 @@ public class Nivel {
                     tileXJugadorIzquierda + rango > tileXEnemigoIzquierda) {
 
                 if (pelota.colisiona(enemigo)) {
-                    pelota.restablecerPosicionInicial();
+                    pelotaMuere();
                 }
             }
 
@@ -776,11 +801,7 @@ public class Nivel {
 
                 if (pelota.y + pelota.altura / 2 > GameView.pantallaAlto) {
                     // ha perdido
-                    scrollEjeX = 0;
-                    scrollEjeY = 0;
-                    pelota.restablecerPosicionInicial();
-                    nivelPausado = true;
-                    mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+                    pelotaMuere();
                 }
 
             }
@@ -880,7 +901,7 @@ public class Nivel {
                     (int) (disparo.y - disparo.cArriba) / Tile.altura;
 
             if (disparo.colisiona(pelota)) {
-                pelota.restablecerPosicionInicial();
+                pelotaMuere();
             }
 
 
@@ -968,6 +989,15 @@ public class Nivel {
 
     }
 
+    private void pelotaMuere() {
+        scrollEjeX = 0;
+        scrollEjeY = 0;
+        pelota.restablecerPosicionInicial();
+        nivelPausado = true;
+        mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.you_lose);
+        this.contadorTiros.reiniciarContador();
+        this.tiempoPelotaDetenida = 0;
+    }
 
 
     public Pelota getPelota() {

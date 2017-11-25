@@ -4,18 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.plataformas.modelos.Nivel;
-import com.plataformas.modelos.controles.BotonDisparar;
-import com.plataformas.modelos.controles.BotonSaltar;
-import com.plataformas.modelos.controles.IconoVida;
 import com.plataformas.modelos.controles.Marcador;
-import com.plataformas.modelos.controles.Pad;
 
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
@@ -95,30 +89,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     boolean duranteTiro = false;
 
     public void procesarEventosTouch() {
-        boolean pulsacionPadMover = false;
-
 
         for (int i = 0; i < 6; i++) {
             if (accion[i] != NO_ACTION) {
 
                 if (accion[i] == ACTION_DOWN) {
-                    if (nivel.nivelPausado)
-                        nivel.nivelPausado = false;
-                    if (!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+
+                    if (!nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         duranteTiro = true;
                         nivel.xInicioTiro = x[i];
                         nivel.yInicioTiro = y[i];
                     }
                 }
                 if (accion[i] == ACTION_MOVE) {
-                    if (!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+                    if (!nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         nivel.xFinalTiro = x[i];
                         nivel.yFinalTiro = y[i];
                     }
 
                 }
                 if (accion[i] == ACTION_UP) {
-                    if (!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+                    if (nivel.nivelPausado) {
+                        nivel.nivelPausado = false;
+                    } else if (!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         nivel.xFinalTiro = x[i];
                         nivel.yFinalTiro = y[i];
                         duranteTiro = false;
