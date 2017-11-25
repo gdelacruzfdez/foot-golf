@@ -95,9 +95,9 @@ public class Nivel {
                 R.drawable.capa1), 0);
         fondos[1] = new Fondo(context, CargadorGraficos.cargarBitmap(context,
                 R.drawable.capa2), 1f);
-        contadorTiros = new ContadorTiros(context, GameView.pantallaAncho * 0.1, GameView.pantallaAlto * 0.1, this.tirosPermitidos);
 
         inicializarMapaTiles();
+        contadorTiros = new ContadorTiros(context, GameView.pantallaAncho * 0.05, GameView.pantallaAlto * 0.1, this.tirosPermitidos);
     }
 
 
@@ -316,6 +316,8 @@ public class Nivel {
         List<String> lineas = new LinkedList<String>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         {
+            String nivel = reader.readLine();
+            this.tirosPermitidos = Integer.parseInt(nivel);
             String linea = reader.readLine();
             anchoLinea = linea.length();
             while (linea != null) {
