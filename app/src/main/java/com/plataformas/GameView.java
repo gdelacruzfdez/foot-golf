@@ -95,14 +95,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 if (accion[i] == ACTION_DOWN) {
 
-                    if (!nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+                    if (!duranteTiro && !nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         duranteTiro = true;
                         nivel.xInicioTiro = x[i];
                         nivel.yInicioTiro = y[i];
                     }
                 }
                 if (accion[i] == ACTION_MOVE) {
-                    if (!nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+                    if ( duranteTiro && !nivel.nivelPausado && !nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         nivel.xFinalTiro = x[i];
                         nivel.yFinalTiro = y[i];
                     }
@@ -111,7 +111,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if (accion[i] == ACTION_UP) {
                     if (nivel.nivelPausado) {
                         nivel.nivelPausado = false;
-                    } else if (!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
+                    } else if (duranteTiro &&!nivel.disparado && !nivel.getPelota().isEnMovimiento()) {
                         nivel.xFinalTiro = x[i];
                         nivel.yFinalTiro = y[i];
                         duranteTiro = false;
