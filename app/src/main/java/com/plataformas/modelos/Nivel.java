@@ -406,6 +406,7 @@ public class Nivel {
 
                 if (pelota.colisiona(enemigo)) {
                     //TODO FINALIZAR JUEGO O REINICIAR NIVEL, PIERDE
+                    pelota.restablecerPosicionInicial();
                 }
             }
 
@@ -877,6 +878,7 @@ public class Nivel {
 
             if (disparo.colisiona(pelota)) {
                 //TODO FINALIZAR JUEGO
+                pelota.restablecerPosicionInicial();
             }
 
 

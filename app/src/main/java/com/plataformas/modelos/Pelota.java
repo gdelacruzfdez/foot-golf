@@ -21,7 +21,6 @@ public class Pelota extends Modelo {
     double velocidadY; // actual
 
     double VALOR_ROZAMIENTO = 0.8f;
-    boolean enMovimiento = false;
     public boolean enElAire; // está en el aire
 
     double xInicial;
@@ -72,10 +71,16 @@ public class Pelota extends Modelo {
 
     public void actualizar(long tiempo) {
         sprite.actualizar(tiempo);
+        if (velocidadX != 0 || velocidadY != 0) {
+            sprite = sprites.get(PELOTA_MOVIMIENTO);
+        } else {
+            sprite = sprites.get(PELOTA_PARADA);
+        }
         aplicarRozamiento();
     }
 
     public void aplicarRozamiento() {
+
         if (!enElAire) {
             if (velocidadX > 0) {
                 velocidadX -= VALOR_ROZAMIENTO;
@@ -94,6 +99,10 @@ public class Pelota extends Modelo {
     public void restablecerPosicionInicial() {
         this.x = xInicial;
         this.y = yInicial;
+        this.velocidadX = 0;
+        this.velocidadY = 0;
+        this.enElAire = false;
+
     }
 
     public void setxInicial(double xInicial) {

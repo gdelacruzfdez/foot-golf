@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ActLocalizacion</string>
+
+    <string name="latitude_label">Latitud</string>
+    <string name="longitude_label">Longitud</string>
+    <string name="last_update_time_label">Momento de la última actualización</string>
+
+    <string name="start_updates">Empezar act.</string>
+    <string name="stop_updates">Parar act.</string>
+    <string name="location_updated_message">Localización actualizada</string>
+
+    <string name="address_found">Dirección encontrada</string>
+    <string name="no_address_found">Perdón, no se ha podido encontra la dirección</string>
+    <string name="no_location_data_provided">No se ha proporcionado localización</string>
+    <string name="service_not_available">Perdón, el servicio de geocoding no está disponible</string>
+    <string name="invalid_lat_long_used">Latitud o longitud no válidas</string>
+    <string name="direccionText">Dirección</string>
+</resources>
