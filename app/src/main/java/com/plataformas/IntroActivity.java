@@ -30,7 +30,7 @@ public class IntroActivity extends Activity {
         try {
             VideoView videoView = new VideoView(this);
             setContentView(videoView);
-            Uri path = Uri.parse("android.resources://" + getPackageName() + R.raw.intro);
+            Uri path = Uri.parse("android.resources://" + getPackageName()+"/" + R.raw.intro);
             videoView.setVideoURI(path);
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -38,6 +38,7 @@ public class IntroActivity extends Activity {
                     jump();
                 }
             });
+            videoView.start();
         } catch (Exception e) {
         }
     }
