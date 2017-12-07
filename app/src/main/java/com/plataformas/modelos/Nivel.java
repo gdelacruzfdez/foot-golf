@@ -359,7 +359,7 @@ public class Nivel {
                 int yCentroAbajoTileD = y * Tile.altura + Tile.altura;
                 enemigos.add(new EnemigoDispara(context, xCentroAbajoTileD, yCentroAbajoTileD));
                 return new Tile(null, Tile.PASABLE);
-            case 'A':
+            case 'C':
                 int xCentroAbajoTileA = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileA = y * Tile.altura + Tile.altura;
                 checkpoints.add(new CheckPoint(context, xCentroAbajoTileA, yCentroAbajoTileA));
@@ -384,6 +384,15 @@ public class Nivel {
             case '.':
                 // en blanco, sin textura
                 return new Tile(null, Tile.PASABLE);
+            case 'H':
+                //Bloque de hielo
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.hielo), Tile.SOLIDO, Material.hielo);
+            case 'A':
+                //Bloque de arena
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.sand), Tile.SOLIDO, Material.arena);
+            case 'L':
+                //Bloque de lava
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.lava), Tile.PASABLE, Material.lava);
             case '#':
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
@@ -408,6 +417,28 @@ public class Nivel {
                 = (int) pelota.y / Tile.altura;
         int tileYJugadorSuperior
                 = (int) (pelota.y - (pelota.altura / 2 - 1)) / Tile.altura;
+
+        int tileXJugador = (int) (pelota.x / Tile.ancho);
+        int tileYJugador = (int) (pelota.y / Tile.altura);
+        int tileYDebajoJugador = tileYJugador + 1;
+
+        if (mapaTiles[tileXJugador][tileYJugador].material ==
+                Material.lava) {
+            pelotaMuere();
+            return;
+        }
+
+        if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
+                Material.arena) {
+            pelota.velocidadX /= 1.4;
+            pelota.velocidadY /= 1.2;
+
+        }
+
+        if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
+                Material.hielo) {
+            pelota.velocidadX *= 1.3;
+        }
 
         for (Iterator<EnemigoInterface> iterator = enemigos.iterator(); iterator.hasNext(); ) {
             AbstractEnemigo enemigo = (AbstractEnemigo) iterator.next();
