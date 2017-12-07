@@ -1,4 +1,4 @@
-package com.plataformas.modelos;
+package com.plataformas.modelos.pelotas;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import com.plataformas.R;
 import com.plataformas.gestores.CargadorGraficos;
 import com.plataformas.graficos.Sprite;
+import com.plataformas.modelos.Modelo;
+import com.plataformas.modelos.Nivel;
 
 import java.util.HashMap;
 
@@ -17,24 +19,30 @@ public class Pelota extends Modelo {
 
     public static final String PELOTA_MOVIMIENTO = "Pelota_movimiento";
     public static final String PELOTA_PARADA = "Pelota_parada";
-
-
-    double velocidadX;
-    double velocidadY; // actual
-
     public static final double VALOR_ROZAMIENTO = 0.8f;
-    public boolean enElAire; // está en el aire
+    public static final double FACTOR_REDUCCION_VELOCIDAD = 6;
+    public static final double FACTOR_REBOTE = 2;
 
+    public double velocidadX;
+    public double velocidadY; // actual
+
+
+    public boolean enElAire; // está en el aire
+    public double factorReduccionVelocidad;
+    public double factorRebote;
+    public double rozamiento;
     double xInicial;
     double yInicial;
 
-    private Sprite sprite;
-    private HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
+    Sprite sprite;
+    HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
 
     public Pelota(Context context, double xInicial, double yInicial) {
         super(context, 0, 0, 22, 22);
         inicializar();
-
+        rozamiento = VALOR_ROZAMIENTO;
+        factorReduccionVelocidad = FACTOR_REDUCCION_VELOCIDAD;
+        factorRebote = FACTOR_REBOTE;
         this.xInicial = xInicial;
         this.yInicial = yInicial - altura / 2;
 
@@ -85,12 +93,12 @@ public class Pelota extends Modelo {
 
         if (!enElAire) {
             if (velocidadX > 0) {
-                velocidadX -= VALOR_ROZAMIENTO;
+                velocidadX -= rozamiento;
                 if (velocidadX < 0) {
                     velocidadX = 0;
                 }
             } else if (velocidadX < 0) {
-                velocidadX += VALOR_ROZAMIENTO;
+                velocidadX += rozamiento;
                 if (velocidadX > 0) {
                     velocidadX = 0;
                 }

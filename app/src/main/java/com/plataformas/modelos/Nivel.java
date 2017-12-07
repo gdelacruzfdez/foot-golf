@@ -18,6 +18,8 @@ import com.plataformas.modelos.enemigo.EnemigoDispara;
 import com.plataformas.modelos.enemigo.EnemigoInterface;
 import com.plataformas.modelos.enemigo.EnemigoSalto;
 import com.plataformas.modelos.enemigo.Pinchos;
+import com.plataformas.modelos.pelotas.Pelota;
+import com.plataformas.modelos.pelotas.PelotaTenis;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -160,8 +162,8 @@ public class Nivel {
                 double velocidadX = xPuntoFinal - xPelota;
                 double velocidadY = yPuntoFinal - yPelota;
 
-                pelota.velocidadX = velocidadX / 6;
-                pelota.velocidadY = velocidadY / 6;
+                pelota.velocidadX = velocidadX / pelota.factorReduccionVelocidad;
+                pelota.velocidadY = velocidadY / pelota.factorReduccionVelocidad;
                 pelota.enElAire = true;
                 disparado = false;
                 this.contadorTiros.incrementarTiros();
@@ -359,7 +361,7 @@ public class Nivel {
             case 'P':
                 int xCentroAbajoTileP = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileP = y * Tile.altura + Tile.altura;
-                pelota = new Pelota(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                pelota = new PelotaTenis(context, xCentroAbajoTileP, yCentroAbajoTileP);
                 return new Tile(null, Tile.PASABLE);
             case 'D':
                 int xCentroAbajoTileD = x * Tile.ancho + Tile.ancho / 2;
@@ -724,7 +726,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeDerecho - pelota.ancho / 2;
-                    pelota.velocidadX = -pelota.velocidadX / 5;
+                    pelota.velocidadX = -pelota.velocidadX / pelota.factorReduccionVelocidad;
                 }
             }
         }
@@ -770,7 +772,7 @@ public class Nivel {
                 } else {
                     // Opcional, corregir posición
                     pelota.x = TileJugadorBordeIzquierdo + pelota.ancho / 2;
-                    pelota.velocidadX = -pelota.velocidadX / 5;
+                    pelota.velocidadX = -pelota.velocidadX / pelota.factorReduccionVelocidad;
                 }
             }
         }
@@ -845,9 +847,9 @@ public class Nivel {
                 if (distanciaY > 0) {
                     pelota.y += Math.min(distanciaY, pelota.velocidadY);
 
-                } else if (pelota.velocidadY > 0.8f) {
+                } else if (pelota.velocidadY > velocidadGravedad*2) {
                     //REBOTE
-                    pelota.velocidadY = -pelota.velocidadY / 2;
+                    pelota.velocidadY = -pelota.velocidadY / pelota.factorRebote;
                     pelota.velocidadX /= 1.5;
                 } else {
                     // Toca suelo, nos aseguramos de que está bien
