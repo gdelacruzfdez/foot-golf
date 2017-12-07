@@ -5,5 +5,5 @@ package com.plataformas.modelos;
  */
 
 public enum Material {
-    tierra,lava, aire, arena,hielo
+    tierra,lava, aire, arena, muelle, hielo
 }

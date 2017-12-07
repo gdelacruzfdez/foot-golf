@@ -397,6 +397,9 @@ public class Nivel {
                 int yCentroAbajoTileK = y * Tile.altura + Tile.altura;
                 pinchos.add(new Pinchos(context, xCentroAbajoTileK, yCentroAbajoTileK));
                 return new Tile(null, Tile.PASABLE);
+            case 'J':
+                //Suelo que rebota
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.muelle), Tile.SOLIDO, Material.muelle);
             case 'H':
                 //Bloque de hielo
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.hielo), Tile.SOLIDO, Material.hielo);
@@ -451,6 +454,12 @@ public class Nivel {
         if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
                 Material.hielo) {
             pelota.velocidadX *= 1.3;
+        }
+
+        if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
+                Material.muelle) {
+            pelota.velocidadY *= 1.5;
+
         }
 
 

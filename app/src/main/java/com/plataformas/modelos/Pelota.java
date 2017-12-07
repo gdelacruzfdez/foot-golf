@@ -22,7 +22,7 @@ public class Pelota extends Modelo {
     double velocidadX;
     double velocidadY; // actual
 
-    double VALOR_ROZAMIENTO = 0.8f;
+    public static final double VALOR_ROZAMIENTO = 0.8f;
     public boolean enElAire; // está en el aire
 
     double xInicial;
