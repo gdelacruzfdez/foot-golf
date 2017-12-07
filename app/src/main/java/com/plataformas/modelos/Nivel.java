@@ -17,6 +17,7 @@ import com.plataformas.modelos.enemigo.Enemigo;
 import com.plataformas.modelos.enemigo.EnemigoDispara;
 import com.plataformas.modelos.enemigo.EnemigoInterface;
 import com.plataformas.modelos.enemigo.EnemigoSalto;
+import com.plataformas.modelos.enemigo.Pinchos;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -40,6 +41,7 @@ public class Nivel {
     private List<DisparoJugador> disparosJugador;
     private List<DisparoEnemigo> disparosEnemigos;
     private List<Recolectable> recolectables;
+    private List<Pinchos> pinchos;
     private Meta meta;
 
     public static final double TIEMPO_COMPROBACION_DETENIDA = 500;
@@ -85,6 +87,7 @@ public class Nivel {
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
         nivelPausado = true;
 
+        pinchos = new ArrayList<>();
         enemigos = new LinkedList<EnemigoInterface>();
         disparosJugador = new LinkedList<DisparoJugador>();
         disparosEnemigos = new LinkedList<>();
@@ -199,6 +202,10 @@ public class Nivel {
             }
 
             pelota.dibujar(canvas);
+
+            for (Pinchos pincho : pinchos) {
+                pincho.dibujar(canvas);
+            }
 
             for (EnemigoInterface enemigo : enemigos) {
                 enemigo.dibujar(canvas);
@@ -384,6 +391,12 @@ public class Nivel {
             case '.':
                 // en blanco, sin textura
                 return new Tile(null, Tile.PASABLE);
+            case 'K':
+                //Pinchos
+                int xCentroAbajoTileK = x * Tile.ancho + Tile.ancho / 2;
+                int yCentroAbajoTileK = y * Tile.altura + Tile.altura;
+                pinchos.add(new Pinchos(context, xCentroAbajoTileK, yCentroAbajoTileK));
+                return new Tile(null, Tile.PASABLE);
             case 'H':
                 //Bloque de hielo
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.hielo), Tile.SOLIDO, Material.hielo);
@@ -439,6 +452,15 @@ public class Nivel {
                 Material.hielo) {
             pelota.velocidadX *= 1.3;
         }
+
+
+        for (Pinchos pincho : pinchos) {
+            if (pelota.colisiona(pincho)) {
+                pelotaMuere();
+                return;
+            }
+        }
+
 
         for (Iterator<EnemigoInterface> iterator = enemigos.iterator(); iterator.hasNext(); ) {
             AbstractEnemigo enemigo = (AbstractEnemigo) iterator.next();

@@ -22,6 +22,5 @@ public class Meta extends Modelo {
         imagen.setBounds(xIzquierda, yArriva, xIzquierda
                 + ancho, yArriva + altura);
         imagen.draw(canvas);
-
     }
 }
