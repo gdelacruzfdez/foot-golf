@@ -126,4 +126,12 @@ public class Pelota extends Modelo {
     public void setyInicial(double yInicial) {
         this.yInicial = yInicial;
     }
+
+    public void setx(double x) {
+        this.x = x;
+    }
+
+    public void sety(double y) {
+        this.y = y;
+    }
 }

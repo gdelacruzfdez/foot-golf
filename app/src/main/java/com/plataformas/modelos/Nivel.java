@@ -39,6 +39,8 @@ public class Nivel {
     private ContadorTiros contadorTiros;
 
     private List<CheckPoint> checkpoints;
+    private List<Portal> entradas;
+    private List<Portal> salidas;
     private List<EnemigoInterface> enemigos;
     private List<DisparoJugador> disparosJugador;
     private List<DisparoEnemigo> disparosEnemigos;
@@ -95,6 +97,8 @@ public class Nivel {
         disparosEnemigos = new LinkedList<>();
         recolectables = new ArrayList<>();
         checkpoints = new ArrayList<>();
+        entradas = new ArrayList<>();
+        salidas = new ArrayList<>();
         fondos = new Fondo[2];
         fondos[0] = new Fondo(context, CargadorGraficos.cargarBitmap(context,
                 R.drawable.capa1), 0);
@@ -183,6 +187,14 @@ public class Nivel {
                 c.actualizar(tiempo);
             }
 
+            for (Portal p : entradas) {
+                p.actualizar(tiempo);
+            }
+
+            for (Portal s : salidas) {
+                s.actualizar(tiempo);
+            }
+
             pelota.actualizar(tiempo);
             aplicarReglasMovimiento();
         }
@@ -194,6 +206,14 @@ public class Nivel {
             fondos[0].dibujar(canvas);
             fondos[1].dibujar(canvas);
             dibujarTiles(canvas);
+
+            for (Portal p : entradas) {
+                p.dibujar(canvas);
+            }
+
+            for (Portal s : salidas) {
+                s.dibujar(canvas);
+            }
 
             for (DisparoJugador disparoJugador : disparosJugador) {
                 disparoJugador.dibujar(canvas);
@@ -222,6 +242,9 @@ public class Nivel {
             for (CheckPoint c : checkpoints) {
                 c.dibujar(canvas);
             }
+
+
+
             contadorTiros.dibujar(canvas);
 
             if (nivelPausado) {
@@ -372,6 +395,21 @@ public class Nivel {
                 int xCentroAbajoTileA = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileA = y * Tile.altura + Tile.altura;
                 checkpoints.add(new CheckPoint(context, xCentroAbajoTileA, yCentroAbajoTileA));
+                return new Tile(null, Tile.PASABLE);
+            case 'N':
+                int xCentroAbajoTileN = x * Tile.ancho + Tile.ancho / 2;
+                int yCentroAbajoTileN = y * Tile.altura + Tile.altura;
+                Portal n=new Portal(context, xCentroAbajoTileN, yCentroAbajoTileN);
+                n.setIDUnion(entradas.size());
+                entradas.add(n);
+                return new Tile(null, Tile.PASABLE);
+            case 'O':
+                int xCentroAbajoTileO = x * Tile.ancho + Tile.ancho / 2;
+                int yCentroAbajoTileO = y * Tile.altura + Tile.altura;
+                Portal p=new Portal(context, xCentroAbajoTileO, yCentroAbajoTileO);
+                p.construirComoSalida();
+                p.setIDUnion(salidas.size());
+                salidas.add(p);
                 return new Tile(null, Tile.PASABLE);
             case 'M':
                 int xCentroAbajoTileM = x * Tile.ancho + Tile.ancho / 2;
@@ -1050,6 +1088,24 @@ public class Nivel {
                 c.alcanzar();
                 pelota.setxInicial(c.x);
                 pelota.setyInicial(c.y - (c.altura / 2));
+            }
+        }
+
+        for (Iterator<Portal> iterator = entradas.iterator(); iterator.hasNext(); ) {
+            Portal p = iterator.next();
+            if (pelota.colisiona(p)) {
+                for (int i = 0; i < salidas.size(); ++i)
+                {
+                    Portal o = salidas.get(i);
+                    if(o.IDUnion==p.IDUnion)
+                    {
+                        pelota.setx(o.x);
+                        pelota.sety(o.y);
+
+                    }
+                }
+
+                ;
             }
         }
 
