@@ -103,7 +103,7 @@ public class Nivel {
         fondos[0] = new Fondo(context, CargadorGraficos.cargarBitmap(context,
                 R.drawable.capa1), 0);
         fondos[1] = new Fondo(context, CargadorGraficos.cargarBitmap(context,
-                R.drawable.capa2), 1f);
+                R.drawable.bluebackground), 1f);
 
         inicializarMapaTiles();
         contadorTiros = new ContadorTiros(context, GameView.pantallaAncho * 0.05, GameView.pantallaAlto * 0.1, this.tirosPermitidos);
@@ -451,7 +451,7 @@ public class Nivel {
             case '#':
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
-                        R.drawable.musgo), Tile.SOLIDO);
+                        R.drawable.grass), Tile.SOLIDO);
             default:
                 //cualquier otro caso
                 return new Tile(null, Tile.PASABLE);

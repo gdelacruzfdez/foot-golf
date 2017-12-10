@@ -157,7 +157,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             if (duranteTiro) {
                 Paint p = new Paint();
-                p.setColor(Color.WHITE);
+                p.setColor(Color.BLACK);
                 float xPelota = (float) nivel.getPelota().getCoordenadaXDibujarPelota();
                 float yPelota = (float) nivel.getPelota().getCoordenadaYDibujarPelota();
 
