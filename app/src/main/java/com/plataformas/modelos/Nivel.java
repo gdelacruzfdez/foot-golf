@@ -46,7 +46,6 @@ public class Nivel {
     private List<DisparoEnemigo> disparosEnemigos;
     private List<Recolectable> recolectables;
     private List<Pinchos> pinchos;
-    private Meta meta;
 
     public static final double TIEMPO_COMPROBACION_DETENIDA = 500;
     private double tiempoPelotaDetenida = 0;
@@ -233,7 +232,6 @@ public class Nivel {
                 enemigo.dibujar(canvas);
             }
 
-            meta.dibujar(canvas);
 
             for (Recolectable r : recolectables) {
                 r.dibujar(canvas);
@@ -383,7 +381,7 @@ public class Nivel {
             case 'P':
                 int xCentroAbajoTileP = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileP = y * Tile.altura + Tile.altura;
-                pelota = new PelotaTenis(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                pelota = new Pelota(context, xCentroAbajoTileP, yCentroAbajoTileP);
                 return new Tile(null, Tile.PASABLE);
             case 'D':
                 int xCentroAbajoTileD = x * Tile.ancho + Tile.ancho / 2;
@@ -409,11 +407,6 @@ public class Nivel {
                 p.construirComoSalida();
                 p.setIDUnion(salidas.size());
                 salidas.add(p);
-                return new Tile(null, Tile.PASABLE);
-            case 'M':
-                int xCentroAbajoTileM = x * Tile.ancho + Tile.ancho / 2;
-                int yCentroAbajoTileM = y * Tile.altura + Tile.altura;
-                meta = new Meta(context, xCentroAbajoTileM, yCentroAbajoTileM);
                 return new Tile(null, Tile.PASABLE);
             case 'R':
                 int xCentroAbajoTileR = x * Tile.ancho + Tile.ancho / 2;
@@ -448,6 +441,18 @@ public class Nivel {
             case 'L':
                 //Bloque de lava
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.lava), Tile.PASABLE, Material.lava);
+            case 'T':
+                //ESQUINA PORTERIA
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.esquinaporteria), Tile.SOLIDO);
+            case '|':
+                //FONDO PORTERIA
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.fondoporteria), Tile.SOLIDO);
+            case 'I':
+                //INTERIOR PORTERIA
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.interiorporteria), Tile.PASABLE, Material.porteria);
+            case '-':
+                //LARGUERO PORTERIA
+                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.largueroporteria), Tile.SOLIDO);
             case '#':
                 // bloque de musgo, no se puede pasar
                 return new Tile(CargadorGraficos.cargarDrawable(context,
@@ -486,6 +491,13 @@ public class Nivel {
             pelotaMuere();
             return;
         }
+
+        if (mapaTiles[tileXJugador][tileYJugador].material ==
+                Material.porteria) {
+            gameView.nivelCompleto();
+            return;
+        }
+
 
         if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
                 Material.arena) {
@@ -1073,9 +1085,6 @@ public class Nivel {
 
         }
 
-        if (pelota.colisiona(meta)) {
-            gameView.nivelCompleto();
-        }
 
         for (Iterator<Recolectable> iterator = recolectables.iterator(); iterator.hasNext(); ) {
             Recolectable r = iterator.next();
