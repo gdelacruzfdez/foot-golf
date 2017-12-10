@@ -19,6 +19,7 @@ import com.plataformas.modelos.enemigo.EnemigoInterface;
 import com.plataformas.modelos.enemigo.EnemigoSalto;
 import com.plataformas.modelos.enemigo.Pinchos;
 import com.plataformas.modelos.pelotas.Pelota;
+import com.plataformas.modelos.pelotas.PelotaBasket;
 import com.plataformas.modelos.pelotas.PelotaTenis;
 
 import java.io.BufferedReader;
@@ -381,7 +382,7 @@ public class Nivel {
             case 'P':
                 int xCentroAbajoTileP = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileP = y * Tile.altura + Tile.altura;
-                pelota = new Pelota(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                pelota = new PelotaBasket(context, xCentroAbajoTileP, yCentroAbajoTileP);
                 return new Tile(null, Tile.PASABLE);
             case 'D':
                 int xCentroAbajoTileD = x * Tile.ancho + Tile.ancho / 2;
