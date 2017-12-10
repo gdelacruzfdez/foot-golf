@@ -244,7 +244,6 @@ public class Nivel {
             }
 
 
-
             contadorTiros.dibujar(canvas);
 
             if (nivelPausado) {
@@ -399,14 +398,14 @@ public class Nivel {
             case 'N':
                 int xCentroAbajoTileN = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileN = y * Tile.altura + Tile.altura;
-                Portal n=new Portal(context, xCentroAbajoTileN, yCentroAbajoTileN);
+                Portal n = new Portal(context, xCentroAbajoTileN, yCentroAbajoTileN);
                 n.setIDUnion(entradas.size());
                 entradas.add(n);
                 return new Tile(null, Tile.PASABLE);
             case 'O':
                 int xCentroAbajoTileO = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileO = y * Tile.altura + Tile.altura;
-                Portal p=new Portal(context, xCentroAbajoTileO, yCentroAbajoTileO);
+                Portal p = new Portal(context, xCentroAbajoTileO, yCentroAbajoTileO);
                 p.construirComoSalida();
                 p.setIDUnion(salidas.size());
                 salidas.add(p);
@@ -476,7 +475,11 @@ public class Nivel {
 
         int tileXJugador = (int) (pelota.x / Tile.ancho);
         int tileYJugador = (int) (pelota.y / Tile.altura);
+
         int tileYDebajoJugador = tileYJugador + 1;
+        if (tileYDebajoJugador == mapaTiles[tileXJugador].length) {
+            tileYDebajoJugador--;
+        }
 
         if (mapaTiles[tileXJugador][tileYJugador].material ==
                 Material.lava) {
@@ -854,7 +857,7 @@ public class Nivel {
             // Tile inferior PASABLE
             // Podemos seguir moviendo hacia abajo
             // NOTA - El ultimo tile es especial (caer al vacío )
-            if (tileYJugadorInferior + 1 <= altoMapaTiles() - 1 &&
+            if (tileYJugadorInferior + 1 <= altoMapaTiles() - 1 && tileXJugadorDerecha <= anchoMapaTiles() &&
                     mapaTiles[tileXJugadorIzquierda][tileYJugadorInferior + 1].tipoDeColision
                             == Tile.PASABLE
                     && mapaTiles[tileXJugadorDerecha][tileYJugadorInferior + 1].tipoDeColision
@@ -885,7 +888,7 @@ public class Nivel {
                 if (distanciaY > 0) {
                     pelota.y += Math.min(distanciaY, pelota.velocidadY);
 
-                } else if (pelota.velocidadY > velocidadGravedad*2) {
+                } else if (pelota.velocidadY > velocidadGravedad * 2) {
                     //REBOTE
                     pelota.velocidadY = -pelota.velocidadY / pelota.factorRebote;
                     pelota.velocidadX /= 1.5;
@@ -1094,11 +1097,9 @@ public class Nivel {
         for (Iterator<Portal> iterator = entradas.iterator(); iterator.hasNext(); ) {
             Portal p = iterator.next();
             if (pelota.colisiona(p)) {
-                for (int i = 0; i < salidas.size(); ++i)
-                {
+                for (int i = 0; i < salidas.size(); ++i) {
                     Portal o = salidas.get(i);
-                    if(o.IDUnion==p.IDUnion)
-                    {
+                    if (o.IDUnion == p.IDUnion) {
                         pelota.setx(o.x);
                         pelota.sety(o.y);
 
