@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 
 public class MenuActivity extends Activity {
 
@@ -21,12 +22,14 @@ public class MenuActivity extends Activity {
     }
 
     public void OpcionesOnClick(View view) {
-        Intent homeIntent = new Intent(MenuActivity.this, MainActivity.class);
+        Intent homeIntent = new Intent(MenuActivity.this, OpcionesActivity.class);
         startActivity(homeIntent);
         finish();
     }
 
     public void SalirOnClick(View view) {
+        System.exit(0);
+
     }
 
 

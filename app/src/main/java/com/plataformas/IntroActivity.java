@@ -8,7 +8,9 @@ import android.view.View;
 
 public class IntroActivity extends Activity {
 
-    private static int SPLASH_TIME_OUT = 8000;
+    private static int SPLASH_TIME_OUT = 4000;
+
+    boolean creado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +31,11 @@ public class IntroActivity extends Activity {
     }
 
     private void jump() {
-        Intent homeIntent = new Intent(IntroActivity.this, MenuActivity.class);
-        startActivity(homeIntent);
-        finish();
+        if (creado == false) {
+            creado = true;
+            Intent homeIntent = new Intent(IntroActivity.this, MenuActivity.class);
+            startActivity(homeIntent);
+            finish();
+        }
     }
 }

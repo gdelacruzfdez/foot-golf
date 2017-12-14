@@ -8,32 +8,44 @@
     android:screenOrientation="landscape"
     tools:context="com.plataformas.MenuActivity">
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background=""
-        android:src="@drawable/boton_jugar"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="122dp"
-        android:onClick="JugarOnClick"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="120dp"
+        android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background=""
-        android:src="@drawable/boton_opciones"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="184dp"
-        android:onClick="OpcionesOnClick"/>
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:onClick="JugarOnClick"
+            android:src="@drawable/boton_jugar"
+            tools:layout_editor_absoluteX="190dp"
+            tools:layout_editor_absoluteY="123dp" />
 
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background=""
-        android:src="@drawable/boton_salir"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="248dp" android:onClick="SalirOnClick"/>
+        <ImageButton
+            android:id="@+id/imageButton2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#00ffffff"
+            android:onClick="OpcionesOnClick"
+            android:src="@drawable/boton_opciones"
+            tools:layout_editor_absoluteX="190dp"
+            tools:layout_editor_absoluteY="184dp" />
+
+        <ImageButton
+            android:id="@+id/imageButton3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="#00ffffff"
+            android:onClick="SalirOnClick"
+            android:src="@drawable/boton_salir"
+            tools:layout_editor_absoluteX="190dp"
+            tools:layout_editor_absoluteY="248dp" />
+
+    </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>
