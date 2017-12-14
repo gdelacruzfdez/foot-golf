@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/menu_fondo"
-    android:screenOrientation="landscape"
-    tools:context="com.plataformas.MenuActivity">
+    tools:context="com.plataformas.OpsActivity"
+    android:background="@drawable/opciones_fondo"
+    android:orientation="horizontal"
+    android:screenOrientation="landscape">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,37 +16,37 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/musicBoton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#00ffffff"
-            android:onClick="JugarOnClick"
-            android:src="@drawable/boton_jugar"
+            android:onClick="MusicaOnClick"
+            android:src="@drawable/boton_musica_activada"
             tools:layout_editor_absoluteX="190dp"
-            tools:layout_editor_absoluteY="123dp" />
+            tools:layout_editor_absoluteY="132dp" />
 
         <ImageButton
-            android:id="@+id/imageButton2"
+            android:id="@+id/imageButton5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="#00ffffff"
-            android:onClick="OpcionesOnClick"
+            android:onClick="PelotasOnClick"
             android:src="@drawable/boton_opciones"
             tools:layout_editor_absoluteX="190dp"
-            tools:layout_editor_absoluteY="184dp" />
+            tools:layout_editor_absoluteY="212dp" />
 
         <ImageButton
-            android:id="@+id/imageButton3"
+            android:id="@+id/imageButton6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="#00ffffff"
-            android:onClick="SalirOnClick"
-            android:src="@drawable/boton_salir"
+            android:onClick="VolverOnClick"
+            android:src="@drawable/boton_volver_menu"
             tools:layout_editor_absoluteX="190dp"
-            tools:layout_editor_absoluteY="248dp" />
-
+            tools:layout_editor_absoluteY="248dp"/>
     </LinearLayout>
+
 
 </android.support.constraint.ConstraintLayout>

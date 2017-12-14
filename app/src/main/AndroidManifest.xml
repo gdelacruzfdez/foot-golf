@@ -29,8 +29,9 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".MenuActivity" />
-        <activity android:name=".OpcionesActivity" />
-        <activity android:name=".PelotasActivity"></activity>
+        <activity android:name=".PelotasActivity" />
+        <activity android:name=".LevelsActivity" />
+        <activity android:name=".OpsActivity"></activity>
     </application>
 
 </manifest>

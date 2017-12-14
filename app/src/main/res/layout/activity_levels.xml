@@ -4,17 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pelotas_fondo"
+    android:background="@drawable/levels_fondo"
     android:orientation="horizontal"
     android:screenOrientation="landscape"
-    tools:context="com.plataformas.PelotasActivity">
+    tools:context="com.plataformas.LevelsActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="80dp"
+        >
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/button"
+            android:layout_width="104dp"
+            android:layout_height="100dp"
+            android:layout_weight="1"
+            android:background="@drawable/nivel1"
+            tools:layout_editor_absoluteX="68dp"
+            tools:layout_editor_absoluteY="122dp"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

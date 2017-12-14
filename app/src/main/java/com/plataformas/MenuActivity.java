@@ -22,7 +22,7 @@ public class MenuActivity extends Activity {
     }
 
     public void OpcionesOnClick(View view) {
-        Intent homeIntent = new Intent(MenuActivity.this, OpcionesActivity.class);
+        Intent homeIntent = new Intent(MenuActivity.this, OpsActivity.class);
         startActivity(homeIntent);
         finish();
     }

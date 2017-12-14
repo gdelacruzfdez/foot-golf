@@ -2,18 +2,20 @@ package com.plataformas;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
-public class OpcionesActivity extends Activity {
+public class OpsActivity extends Activity {
+
     int i = 0;
     ImageButton ig = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_opciones);
+        setContentView(R.layout.activity_ops);
 
         ig = (ImageButton) findViewById(R.id.musicBoton);
 
@@ -36,10 +38,13 @@ public class OpcionesActivity extends Activity {
     }
 
     public void PelotasOnClick(View view) {
+        Intent homeIntent = new Intent(OpsActivity.this, PelotasActivity.class);
+        startActivity(homeIntent);
+        finish();
     }
 
     public void VolverOnClick(View view) {
-        Intent homeIntent = new Intent(OpcionesActivity.this, MenuActivity.class);
+        Intent homeIntent = new Intent(OpsActivity.this, MenuActivity.class);
         startActivity(homeIntent);
         finish();
     }
