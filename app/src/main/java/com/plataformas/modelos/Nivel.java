@@ -43,10 +43,10 @@ public class Nivel {
     private List<Portal> entradas;
     private List<Portal> salidas;
     private List<EnemigoInterface> enemigos;
-    private List<DisparoJugador> disparosJugador;
     private List<DisparoEnemigo> disparosEnemigos;
     private List<Recolectable> recolectables;
     private List<Pinchos> pinchos;
+    private List<Lanzador> lanzadores;
 
     public static final double TIEMPO_COMPROBACION_DETENIDA = 500;
     private double tiempoPelotaDetenida = 0;
@@ -91,9 +91,9 @@ public class Nivel {
         mensaje = CargadorGraficos.cargarBitmap(context, R.drawable.description);
         nivelPausado = true;
 
+        lanzadores = new ArrayList<>();
         pinchos = new ArrayList<>();
         enemigos = new LinkedList<EnemigoInterface>();
-        disparosJugador = new LinkedList<DisparoJugador>();
         disparosEnemigos = new LinkedList<>();
         recolectables = new ArrayList<>();
         checkpoints = new ArrayList<>();
@@ -131,10 +131,6 @@ public class Nivel {
                 disparo.actualizar(tiempo);
             }
 
-
-            for (DisparoJugador disparoJugador : disparosJugador) {
-                disparoJugador.actualizar(tiempo);
-            }
 
             if (contadorTiros.limiteDeTirosAlcanzado()) {
                 if (!pelota.isEnMovimiento()) {
@@ -195,6 +191,10 @@ public class Nivel {
                 s.actualizar(tiempo);
             }
 
+            for (Lanzador lanzador : lanzadores) {
+                lanzador.actualizar(tiempo);
+            }
+
             pelota.actualizar(tiempo);
             aplicarReglasMovimiento();
         }
@@ -215,15 +215,12 @@ public class Nivel {
                 s.dibujar(canvas);
             }
 
-            for (DisparoJugador disparoJugador : disparosJugador) {
-                disparoJugador.dibujar(canvas);
-            }
-
             for (DisparoEnemigo disparoEnemigo : disparosEnemigos) {
                 disparoEnemigo.dibujar(canvas);
             }
 
             pelota.dibujar(canvas);
+
 
             for (Pinchos pincho : pinchos) {
                 pincho.dibujar(canvas);
@@ -231,6 +228,10 @@ public class Nivel {
 
             for (EnemigoInterface enemigo : enemigos) {
                 enemigo.dibujar(canvas);
+            }
+
+            for (Lanzador lanzador : lanzadores) {
+                lanzador.dibujar(canvas);
             }
 
 
@@ -436,6 +437,12 @@ public class Nivel {
             case 'H':
                 //Bloque de hielo
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.hielo), Tile.SOLIDO, Material.hielo);
+            case 'U':
+                int xCentroAbajoTileU = x * Tile.ancho + Tile.ancho / 2;
+                int yCentroAbajoTileU = y * Tile.altura + Tile.altura;
+                Lanzador lanzador = new Lanzador(context, xCentroAbajoTileU, yCentroAbajoTileU);
+                lanzadores.add(lanzador);
+                return new Tile(null, Tile.PASABLE);
             case 'A':
                 //Bloque de arena
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.sand), Tile.SOLIDO, Material.arena);
@@ -523,6 +530,16 @@ public class Nivel {
             if (pelota.colisiona(pincho)) {
                 pelotaMuere();
                 return;
+            }
+        }
+
+        for (Lanzador lanzador : lanzadores) {
+            if (pelota.colisiona(lanzador)) {
+                pelota.velocidadY = 50;
+                pelota.velocidadX *= 1.1;
+                lanzador.activado = true;
+            } else {
+                lanzador.activado = false;
             }
         }
 
@@ -925,87 +942,6 @@ public class Nivel {
                 }
 
             }
-        }
-
-        for (Iterator<DisparoJugador> iterator = disparosJugador.iterator(); iterator.hasNext(); ) {
-
-            DisparoJugador disparoJugador = iterator.next();
-
-            int tileXDisparo = (int) disparoJugador.x / Tile.ancho;
-            int tileYDisparoInferior =
-                    (int) (disparoJugador.y + disparoJugador.cAbajo) / Tile.altura;
-
-            int tileYDisparoSuperior =
-                    (int) (disparoJugador.y - disparoJugador.cArriba) / Tile.altura;
-
-            for (EnemigoInterface enemigo : enemigos) {
-                if (disparoJugador.colisiona((AbstractEnemigo) enemigo)) {
-                    enemigo.destruir();
-                    iterator.remove();
-                    break;
-                }
-            }
-
-
-            if (disparoJugador.velocidadX > 0) {
-                // Tiene delante un tile pasable, puede avanzar.
-                if (tileXDisparo + 1 <= anchoMapaTiles() - 1 &&
-                        mapaTiles[tileXDisparo + 1][tileYDisparoInferior].tipoDeColision
-                                == Tile.PASABLE &&
-                        mapaTiles[tileXDisparo + 1][tileYDisparoSuperior].tipoDeColision
-                                == Tile.PASABLE) {
-
-                    disparoJugador.x += disparoJugador.velocidadX;
-
-                } else if (tileXDisparo <= anchoMapaTiles() - 1) {
-
-                    int TileDisparoBordeDerecho = tileXDisparo * Tile.ancho + Tile.ancho;
-                    double distanciaX =
-                            TileDisparoBordeDerecho - (disparoJugador.x + disparoJugador.cDerecha);
-
-                    if (distanciaX > 0) {
-                        double velocidadNecesaria =
-                                Math.min(distanciaX, disparoJugador.velocidadX);
-                        disparoJugador.x += velocidadNecesaria;
-                    } else {
-                        iterator.remove();
-                        continue;
-                    }
-                }
-            }
-
-            // izquierdaa
-            if (disparoJugador.velocidadX <= 0) {
-                if (tileXDisparo - 1 >= 0 &&
-                        tileYDisparoSuperior < altoMapaTiles() - 1 &&
-                        mapaTiles[tileXDisparo - 1][tileYDisparoSuperior].tipoDeColision ==
-                                Tile.PASABLE &&
-                        mapaTiles[tileXDisparo - 1][tileYDisparoInferior].tipoDeColision ==
-                                Tile.PASABLE) {
-
-                    disparoJugador.x += disparoJugador.velocidadX;
-
-                    // No tengo un tile PASABLE detras
-                    // o es el INICIO del nivel o es uno SOLIDO
-                } else if (tileXDisparo >= 0) {
-                    // Si en el propio tile del jugador queda espacio para
-                    // avanzar más, avanzo
-                    int TileDisparoBordeIzquierdo = tileXDisparo * Tile.ancho;
-                    double distanciaX =
-                            (disparoJugador.x - disparoJugador.cIzquierda) - TileDisparoBordeIzquierdo;
-
-                    if (distanciaX > 0) {
-                        double velocidadNecesaria =
-                                Utilidades.proximoACero(-distanciaX, disparoJugador.velocidadX);
-                        disparoJugador.x += velocidadNecesaria;
-                    } else {
-                        iterator.remove();
-                        continue;
-                    }
-                }
-            }
-
-
         }
 
 

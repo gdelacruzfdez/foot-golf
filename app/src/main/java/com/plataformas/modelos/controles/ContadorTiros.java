@@ -36,7 +36,7 @@ public class ContadorTiros extends Modelo {
     }
 
     public boolean limiteDeTirosAlcanzado() {
-        return limiteDeTiros == numeroDeTiros;
+        return limiteDeTiros <= numeroDeTiros;
     }
 
     public void reiniciarContador() {
