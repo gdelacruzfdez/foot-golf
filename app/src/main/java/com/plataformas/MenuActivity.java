@@ -16,7 +16,7 @@ public class MenuActivity extends Activity {
     }
 
     public void JugarOnClick(View view) {
-        Intent homeIntent = new Intent(MenuActivity.this, MainActivity.class);
+        Intent homeIntent = new Intent(MenuActivity.this, LevelsActivity.class);
         startActivity(homeIntent);
         finish();
     }
