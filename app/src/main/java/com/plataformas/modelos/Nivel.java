@@ -47,6 +47,7 @@ public class Nivel {
     private List<Recolectable> recolectables;
     private List<Pinchos> pinchos;
     private List<Lanzador> lanzadores;
+    private List<Muelle> muelles;
 
     public static final double TIEMPO_COMPROBACION_DETENIDA = 500;
     private double tiempoPelotaDetenida = 0;
@@ -92,6 +93,7 @@ public class Nivel {
         nivelPausado = true;
 
         lanzadores = new ArrayList<>();
+        muelles = new ArrayList<>();
         pinchos = new ArrayList<>();
         enemigos = new LinkedList<EnemigoInterface>();
         disparosEnemigos = new LinkedList<>();
@@ -170,6 +172,9 @@ public class Nivel {
 
             } else {
                 if (pelota.velocidadX == 0 && pelota.velocidadY == 0) {
+                    for (Muelle muelle : muelles) {
+                        muelle.reiniciarRebotes();
+                    }
                     disparado = false;
                 }
             }
@@ -213,6 +218,10 @@ public class Nivel {
 
             for (Portal s : salidas) {
                 s.dibujar(canvas);
+            }
+
+            for (Muelle muelle : muelles) {
+                muelle.dibujar(canvas);
             }
 
             for (DisparoEnemigo disparoEnemigo : disparosEnemigos) {
@@ -433,7 +442,11 @@ public class Nivel {
                 return new Tile(null, Tile.PASABLE);
             case 'J':
                 //Suelo que rebota
-                return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.muelle), Tile.SOLIDO, Material.muelle);
+                int xCentroAbajoTileJ = x * Tile.ancho + Tile.ancho / 2;
+                int yCentroAbajoTileJ = y * Tile.altura + Tile.altura;
+                Muelle muelle = new Muelle(context, xCentroAbajoTileJ, yCentroAbajoTileJ);
+                muelles.add(muelle);
+                return new Tile(null, Tile.SOLIDO, Material.muelle);
             case 'H':
                 //Bloque de hielo
                 return new Tile(CargadorGraficos.cargarDrawable(context, R.drawable.hielo), Tile.SOLIDO, Material.hielo);
@@ -519,9 +532,15 @@ public class Nivel {
             pelota.velocidadX *= 1.3;
         }
 
+
         if (mapaTiles[tileXJugador][tileYDebajoJugador].material ==
                 Material.muelle) {
-            pelota.velocidadY *= 1.5;
+            Muelle muelle = getMuelleAt(tileXJugador, tileYDebajoJugador);
+            if (!muelle.haLlegadoAlMaximoDeRebotes() && pelota.velocidadY > 0) {
+                muelle.numeroRebotes++;
+                pelota.velocidadY *= -1.5;
+            }
+
 
         }
 
@@ -1071,6 +1090,17 @@ public class Nivel {
 
     public Pelota getPelota() {
         return this.pelota;
+    }
+
+    public Muelle getMuelleAt(int x, int y) {
+        for (Muelle muelle : muelles) {
+            double tileX = (muelle.x / muelle.cDerecha) - 1;
+            int tileY = (int) (muelle.y / muelle.altura);
+            if (tileX == x && tileY == y) {
+                return muelle;
+            }
+        }
+        return null;
     }
 }
 

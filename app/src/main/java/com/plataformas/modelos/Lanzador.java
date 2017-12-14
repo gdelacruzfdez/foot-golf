@@ -38,7 +38,7 @@ public class Lanzador extends Modelo {
         Sprite activado = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.impulso_2),
                 ancho, altura,
-                4, 4, true);
+                1, 1, true);
         sprites.put(ACTIVADO, activado);
         sprite = desactivado;
     }
