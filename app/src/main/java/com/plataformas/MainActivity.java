@@ -9,16 +9,14 @@ import android.view.WindowManager;
 
 public class MainActivity extends Activity {
     GameView gameView = null;
-    int level = 1;
+    int level;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Get the bundle
-        Bundle bundle = getIntent().getExtras();
-        //Extract the data…
-        //level =Integer.parseInt(bundle.getString("levels"));
+
+        level = getIntent().getIntExtra("LEVEL",0);
 
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -29,9 +27,10 @@ public class MainActivity extends Activity {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
+
         gameView = new GameView(this);
         setContentView(gameView);
-        gameView.numeroNivel = 0;
+        gameView.numeroNivel = level;
         gameView.requestFocus();
     }
 
@@ -40,8 +39,7 @@ public class MainActivity extends Activity {
         finish();
         System.gc();
 
-        synchronized(gameView.gameloop)
-        {
+        synchronized (gameView.gameloop) {
             gameView.context = null;
             gameView.gameloop.setRunning(false);
             gameView = null;

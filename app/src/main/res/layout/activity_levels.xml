@@ -24,7 +24,9 @@
             android:background="@drawable/nivel1"
             android:onClick="NivelOnClick"
             tools:layout_editor_absoluteX="68dp"
-            tools:layout_editor_absoluteY="122dp" />
+            tools:layout_editor_absoluteY="122dp"
+            android:text="0"
+            android:textColor="@android:color/transparent"/>
 
         <Button
             android:id="@+id/button2"
@@ -38,7 +40,10 @@
             android:background="@drawable/nivel2"
             android:onClick="NivelOnClick"
             tools:layout_editor_absoluteX="68dp"
-            tools:layout_editor_absoluteY="122dp" />
+            tools:layout_editor_absoluteY="122dp"
+
+            android:text="1"
+            android:textColor="@android:color/transparent"/>
 
         <Button
             android:id="@+id/button3"
@@ -53,7 +58,9 @@
             android:background="@drawable/nivel3"
             android:onClick="NivelOnClick"
             tools:layout_editor_absoluteX="68dp"
-            tools:layout_editor_absoluteY="122dp" />
+            tools:layout_editor_absoluteY="122dp"
+            android:text="2"
+            android:textColor="@android:color/transparent"/>
 
         <Button
             android:id="@+id/button4"
@@ -67,7 +74,10 @@
             android:background="@drawable/nivel4"
             android:onClick="NivelOnClick"
             tools:layout_editor_absoluteX="68dp"
-            tools:layout_editor_absoluteY="122dp" />
+            tools:layout_editor_absoluteY="122dp"
+            android:text="3"
+            android:textColor="@android:color/transparent"
+            />
     </RelativeLayout>
 
     <LinearLayout

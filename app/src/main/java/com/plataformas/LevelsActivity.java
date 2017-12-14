@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class LevelsActivity extends Activity {
 
@@ -16,20 +17,16 @@ public class LevelsActivity extends Activity {
 
     public void VolverOnClick(View view) {
         Intent homeIntent = new Intent(LevelsActivity.this, MenuActivity.class);
-        Bundle bundle = new Bundle();
-
-        //Add your data to bundle
-        bundle.putString("levels", "0");
-        //Add the bundle to the intent
-        homeIntent.putExtras(bundle);
-
-
         startActivity(homeIntent);
-       // finish();
+        finish();
     }
 
     public void NivelOnClick(View view) {
         Intent homeIntent = new Intent(LevelsActivity.this, MainActivity.class);
+
+
+        Button b = (Button) findViewById(view.getId());
+        homeIntent.putExtra("LEVEL", Integer.parseInt(b.getText().toString()));
         startActivity(homeIntent);
         finish();
     }
