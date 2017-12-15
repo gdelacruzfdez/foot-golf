@@ -3,6 +3,7 @@ package com.plataformas;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,9 @@ public class OpsActivity extends Activity {
 
         ig = (ImageButton) findViewById(R.id.musicBoton);
 
-        i = 0;
+
+        SharedPreferences sharedPref = getSharedPreferences("MyPREFERENCES", MODE_PRIVATE);
+        i = sharedPref.getInt("music", 0);
 
         if (i == 0) {
             ig.setImageResource(R.drawable.boton_musica_activada);
@@ -31,14 +34,22 @@ public class OpsActivity extends Activity {
     }
 
     public void MusicaOnClick(View view) {
+        SharedPreferences sharedpreferences = getSharedPreferences("MyPREFERENCES", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+
+
         if (i == 0) {
             i = 1;
+            editor.putInt("music", i);
+            editor.commit();
             ig.setImageResource(R.drawable.boton_musica_desactivada);
 
             AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
             amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
         } else {
             i = 0;
+            editor.putInt("music", i);
+            editor.commit();
             ig.setImageResource(R.drawable.boton_musica_activada);
 
             AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);

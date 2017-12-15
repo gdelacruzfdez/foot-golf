@@ -24,6 +24,10 @@ public class PelotasActivity extends Activity {
         basket = (Button) findViewById(R.id.bBask);
         tenis = (Button) findViewById(R.id.bTenis);
 
+        SharedPreferences sharedPref = getSharedPreferences("MyPREFERENCES", MODE_PRIVATE);
+        String result = sharedPref.getString("pelota", "f");
+        paintButtons(result.toString());
+
 
     }
 
@@ -39,9 +43,13 @@ public class PelotasActivity extends Activity {
         String cond = b.getText().toString();
         asignarActual(cond);
 
+        paintButtons(cond);
+    }
+
+    private void paintButtons(String cond) {
         switch (cond) {
             case "f":
-                futbol.setBackgroundResource( R.drawable.futa);
+                futbol.setBackgroundResource(R.drawable.futa);
                 basket.setBackgroundResource(R.drawable.bascket);
                 tenis.setBackgroundResource(R.drawable.tenis);
                 break;
@@ -61,17 +69,10 @@ public class PelotasActivity extends Activity {
     }
 
     private void asignarActual(String cond) {
-        Context context = this;
-        SharedPreferences sharedPrefs = getSharedPreferences("DatosSP", context.MODE_PRIVATE);
-
-
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-
+        SharedPreferences sharedpreferences = getSharedPreferences("MyPREFERENCES", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString("pelota", cond);
         editor.commit();
-
     }
 
 

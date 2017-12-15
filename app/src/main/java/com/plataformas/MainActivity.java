@@ -59,8 +59,8 @@ public class MainActivity extends Activity {
     }
 
     private String getBall(){
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        String result = sharedPref.getString("pelotas", "f");
+        SharedPreferences sharedPref = getSharedPreferences("MyPREFERENCES", MODE_PRIVATE);
+        String result = sharedPref.getString("pelota", "f");
         return result;
     }
 
