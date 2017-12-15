@@ -44,6 +44,8 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        Intent homeIntent = new Intent(MainActivity.this, LevelsActivity.class);
+        startActivity(homeIntent);
         finish();
         System.gc();
 
@@ -52,6 +54,7 @@ public class MainActivity extends Activity {
             gameView.gameloop.setRunning(false);
             gameView = null;
         }
+
     }
 
     public static Context getContextOfApplication(){
