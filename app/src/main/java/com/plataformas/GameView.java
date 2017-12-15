@@ -182,7 +182,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void nivelCompleto() throws Exception {
 
-        if (numeroNivel < 1) { // Número Máximo de Nivel
+        if (numeroNivel < 3) { // Número Máximo de Nivel
             numeroNivel++;
         } else {
             numeroNivel = 0;

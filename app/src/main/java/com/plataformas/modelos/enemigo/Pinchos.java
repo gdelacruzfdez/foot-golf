@@ -32,7 +32,7 @@ public class Pinchos extends Modelo {
     Sprite sprite;
     HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
 
-    double duracion = 5000;
+    double duracion = 4000;
     public double ultimaActividad = 0;
 
 
@@ -63,13 +63,13 @@ public class Pinchos extends Modelo {
         Sprite activacion = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.pinchos_saliendo),
                 ancho, altura,
-                6, 7, false);
+                8, 7, false);
         sprites.put(ACTIVACION, activacion);
 
         Sprite desactivacion = new Sprite(
                 CargadorGraficos.cargarDrawable(context, R.drawable.pinchos_oculatandose),
                 ancho, altura,
-                6, 7, false);
+                8, 7, false);
         sprites.put(DESACTIVACION, desactivacion);
 
         sprite=activos;
@@ -88,7 +88,7 @@ public class Pinchos extends Modelo {
             Sprite desactivacion = new Sprite(
                     CargadorGraficos.cargarDrawable(context, R.drawable.pinchos_oculatandose),
                     ancho, altura,
-                    6, 7, false);
+                    8, 7, false);
             sprites.put(DESACTIVACION, desactivacion);
 
             estado = OCULTO;
@@ -104,7 +104,7 @@ public class Pinchos extends Modelo {
             Sprite activacion = new Sprite(
                     CargadorGraficos.cargarDrawable(context, R.drawable.pinchos_saliendo),
                     ancho, altura,
-                    6, 7, false);
+                    8, 7, false);
             sprites.put(ACTIVACION, activacion);
 
             estado = ACTIVO;
