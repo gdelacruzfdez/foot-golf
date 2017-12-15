@@ -133,6 +133,10 @@ public class Nivel {
                 disparo.actualizar(tiempo);
             }
 
+            for (Pinchos pincho : pinchos) {
+                pincho.actualizar(tiempo);
+            }
+
 
             if (contadorTiros.limiteDeTirosAlcanzado()) {
                 if (!pelota.isEnMovimiento()) {
@@ -546,7 +550,7 @@ public class Nivel {
 
 
         for (Pinchos pincho : pinchos) {
-            if (pelota.colisiona(pincho)) {
+            if (pelota.colisiona(pincho) && pincho.estado>0) {
                 pelotaMuere();
                 return;
             }
