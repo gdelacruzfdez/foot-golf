@@ -1,12 +1,14 @@
 package com.plataformas;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Button;
 
 import com.plataformas.modelos.Nivel;
 import com.plataformas.modelos.controles.Marcador;
@@ -15,6 +17,7 @@ import com.plataformas.modelos.controles.Marcador;
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Marcador marcador;
+    private String ball;
 
     boolean iniciado = false;
     Context context;
@@ -26,9 +29,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     private Nivel nivel;
     public int numeroNivel = 0;
 
-    public GameView(Context context) {
+    public GameView(Context context, String ball) {
         super(context);
         iniciado = true;
+        this.ball = ball;
 
         getHolder().addCallback(this);
         setFocusable(true);
@@ -132,7 +136,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     protected void inicializar() throws Exception {
-        nivel = new Nivel(context, numeroNivel);
+        nivel = new Nivel(context, numeroNivel, ball);
         nivel.gameView = this;
 
 
@@ -184,6 +188,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             numeroNivel = 0;
         }
         inicializar();
+
     }
 
     public void surfaceChanged(SurfaceHolder holder, int format, int width,

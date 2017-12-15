@@ -1,13 +1,16 @@
 package com.plataformas.modelos;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.plataformas.GameView;
+import com.plataformas.MainActivity;
 import com.plataformas.R;
 import com.plataformas.gestores.CargadorGraficos;
 import com.plataformas.gestores.Utilidades;
@@ -72,13 +75,13 @@ public class Nivel {
     public float xFinalTiro = 0;
     public float yFinalTiro = 0;
 
-
+    private String ball;
     private int tirosPermitidos = 2;
 
 
-    public Nivel(Context context, int numeroNivel) throws Exception {
+    public Nivel(Context context, int numeroNivel, String ball) throws Exception {
         inicializado = false;
-
+        this.ball = ball;
         this.context = context;
         this.numeroNivel = numeroNivel;
         inicializar();
@@ -396,7 +399,19 @@ public class Nivel {
             case 'P':
                 int xCentroAbajoTileP = x * Tile.ancho + Tile.ancho / 2;
                 int yCentroAbajoTileP = y * Tile.altura + Tile.altura;
-                pelota = new PelotaBasket(context, xCentroAbajoTileP, yCentroAbajoTileP);
+
+
+                switch (ball) {
+                    case "f":
+                        pelota = new Pelota(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                        break;
+                    case "t":
+                        pelota = new PelotaTenis(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                        break;
+                    case "b":
+                        pelota = new PelotaBasket(context, xCentroAbajoTileP, yCentroAbajoTileP);
+                        break;
+                }
                 return new Tile(null, Tile.PASABLE);
             case 'D':
                 int xCentroAbajoTileD = x * Tile.ancho + Tile.ancho / 2;
@@ -550,7 +565,7 @@ public class Nivel {
 
 
         for (Pinchos pincho : pinchos) {
-            if (pelota.colisiona(pincho) && pincho.estado>0) {
+            if (pelota.colisiona(pincho) && pincho.estado > 0) {
                 pelotaMuere();
                 return;
             }

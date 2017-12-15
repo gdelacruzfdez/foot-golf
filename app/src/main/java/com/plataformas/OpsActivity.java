@@ -1,7 +1,9 @@
 package com.plataformas;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +11,7 @@ import android.widget.ImageButton;
 
 public class OpsActivity extends Activity {
 
-    int i = 0;
+    int i;
     ImageButton ig = null;
 
     @Override
@@ -19,6 +21,7 @@ public class OpsActivity extends Activity {
 
         ig = (ImageButton) findViewById(R.id.musicBoton);
 
+        i = 0;
 
         if (i == 0) {
             ig.setImageResource(R.drawable.boton_musica_activada);
@@ -31,9 +34,15 @@ public class OpsActivity extends Activity {
         if (i == 0) {
             i = 1;
             ig.setImageResource(R.drawable.boton_musica_desactivada);
+
+            AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            amanager.setStreamMute(AudioManager.STREAM_SYSTEM, true);
         } else {
             i = 0;
             ig.setImageResource(R.drawable.boton_musica_activada);
+
+            AudioManager amanager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            amanager.setStreamMute(AudioManager.STREAM_SYSTEM, false);
         }
     }
 

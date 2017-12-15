@@ -1,19 +1,27 @@
 package com.plataformas;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 public class MainActivity extends Activity {
     GameView gameView = null;
     int level;
 
+    public static Context contextOfApplication;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        contextOfApplication = getApplicationContext();
 
 
         level = getIntent().getIntExtra("LEVEL",0);
@@ -28,7 +36,7 @@ public class MainActivity extends Activity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
 
-        gameView = new GameView(this);
+        gameView = new GameView(this, getBall());
         setContentView(gameView);
         gameView.numeroNivel = level;
         gameView.requestFocus();
@@ -45,4 +53,18 @@ public class MainActivity extends Activity {
             gameView = null;
         }
     }
+
+    public static Context getContextOfApplication(){
+        return contextOfApplication;
+    }
+
+    private String getBall(){
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        String result = sharedPref.getString("pelotas", "f");
+        return result;
+    }
+
+
+
+
 }

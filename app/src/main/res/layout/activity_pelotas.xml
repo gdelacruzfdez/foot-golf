@@ -16,44 +16,45 @@
         android:layout_marginTop="120dp">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/bFut"
             android:layout_width="104dp"
             android:layout_height="100dp"
             android:layout_marginLeft="80dp"
             android:layout_weight="1"
             android:background="@drawable/fut"
+            android:onClick="CambiarPelotaOnClick"
             android:text="f"
             android:textColor="@android:color/transparent"
             tools:layout_editor_absoluteX="68dp"
             tools:layout_editor_absoluteY="122dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/bBask"
             android:layout_width="104dp"
             android:layout_height="100dp"
-            android:layout_alignBottom="@+id/button"
-            android:layout_marginLeft="25dp"
-            android:layout_toEndOf="@+id/button"
-            android:layout_toRightOf="@+id/button"
+            android:layout_alignBottom="@+id/bFut"
+            android:layout_marginLeft="50dp"
+            android:layout_toEndOf="@+id/bFut"
+            android:layout_toRightOf="@+id/bFut"
             android:layout_weight="1"
             android:background="@drawable/bascket"
+            android:onClick="CambiarPelotaOnClick"
             android:text="b"
             android:textColor="@android:color/transparent"
-
             tools:layout_editor_absoluteX="68dp"
             tools:layout_editor_absoluteY="122dp" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/bTenis"
             android:layout_width="104dp"
             android:layout_height="100dp"
-            android:layout_alignBottom="@+id/button2"
-            android:layout_marginLeft="25dp"
-            android:layout_toEndOf="@+id/button2"
-            android:layout_toRightOf="@+id/button2"
+            android:layout_alignBottom="@+id/bBask"
+            android:layout_marginLeft="50dp"
+            android:layout_toEndOf="@+id/bBask"
+            android:layout_toRightOf="@+id/bBask"
             android:layout_weight="1"
-
             android:background="@drawable/tenis"
+            android:onClick="CambiarPelotaOnClick"
             android:text="t"
             android:textColor="@android:color/transparent"
             tools:layout_editor_absoluteX="68dp"

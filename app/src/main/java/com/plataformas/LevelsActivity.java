@@ -24,7 +24,6 @@ public class LevelsActivity extends Activity {
     public void NivelOnClick(View view) {
         Intent homeIntent = new Intent(LevelsActivity.this, MainActivity.class);
 
-
         Button b = (Button) findViewById(view.getId());
         homeIntent.putExtra("LEVEL", Integer.parseInt(b.getText().toString()));
         startActivity(homeIntent);
